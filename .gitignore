@@ -164,3 +164,4 @@ cython_debug/
 .Rhistory
 *.RData
 *.history
+*.feather
