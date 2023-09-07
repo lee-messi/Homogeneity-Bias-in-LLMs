@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 2 Sept 2023
+## Script date: 7 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -45,7 +45,7 @@ allminilm = read_feather("all-MiniLM-L12-v2.feather") %>%
 
 # Load .RData file -------------------------------------------------------------
 
-load('sentence_bert_models.RData')
+# load('sentence_bert_models.RData')
 
 # Mixed Effects Model for the all-mpnet-base-v2 model --------------------------
 
@@ -271,4 +271,4 @@ mixed(cosine ~ 1 + gender + (1|format),
 
 # Save as .RData ---------------------------------------------------------------
 
-# save.image('sentence_bert_models.RData')
+save.image('sentence_bert_models.RData')

@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 2 Sept 2023
+## Script date: 7 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -184,7 +184,7 @@ cosine_df <- cosine_df %>%
 
 # Load .RData file -------------------------------------------------------------
 
-load("s1_layer_cosine.RData")
+# load("s1_layer_cosine.RData")
 
 # Build mixed effects model including the main effects -------------------------
 
@@ -267,4 +267,4 @@ pairs(cosine.interactions, simple = "gender")
 # Save as .RData ---------------------------------------------------------------
 
 rm(i, simple_prep)
-# save.image('s1_layer_cosine.RData')
+save.image('s1_layer_cosine.RData')
