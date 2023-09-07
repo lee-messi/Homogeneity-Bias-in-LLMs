@@ -162,3 +162,4 @@ cython_debug/
 # R
 .DS_Store
 .Rhistory
+*.RData
