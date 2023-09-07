@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: July 2023
+## Script date: 4 Aug 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
