@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 7 Sept 2023
+## Script date: 14 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -184,10 +184,26 @@ cosine_df <- cosine_df %>%
 
 # Load .RData file -------------------------------------------------------------
 
-# load("s1_layer_cosine.RData")
+# If you have run the entire code before, you can load the .RData file here
+# If this is the first time running this code, ignore the load() function
+# and the four summary() functions that follow. 
+load("s1_layer_cosine.RData")
+
+# Summary output of the four models (M1 ~ M4)
+summary(race.effect)
+summary(gender.effect)
+summary(race.gender)
+summary(cosine.model)
+
+# Log likelihood of the four models (M1 ~ M4)
+logLik(race.effect)
+logLik(gender.effect)
+logLik(race.gender)
+logLik(cosine.model)
 
 # Build mixed effects model including the main effects -------------------------
 
+# Standardize cosine similarity before fitting mixed-effects models
 cosine_std <- cosine_df %>% 
   mutate(across(where(is.numeric), scale))
 
@@ -231,6 +247,14 @@ mixed(cosine ~ 1 + gender + (1|format),
                             calc.derivs = FALSE),
       method = "LRT")
 
+# Model examining both race/ethnicity and gender
+race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                    data = cosine_std, 
+                    control = lmerControl(optimizer = "nmkbw", 
+                                          calc.derivs = FALSE))
+
+summary(race.gender)
+
 # Build mixed effects model including interactions (Supplement) ----------------
 
 cosine.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
@@ -263,8 +287,10 @@ mixed(cosine ~ 1 + race * gender + (1|format),
 
 cosine.interactions <- emmeans(cosine.model, ~ race * gender)
 pairs(cosine.interactions, simple = "gender")
+pairs(cosine.interactions, simple = "race")
 
 # Save as .RData ---------------------------------------------------------------
 
-rm(i, simple_prep)
+# Save all the models as an .RData file
+# rm(i, simple_prep)
 save.image('s1_layer_cosine.RData')

@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 7 Sept 2023
+## Script date: 14 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -45,7 +45,10 @@ allminilm = read_feather("all-MiniLM-L12-v2.feather") %>%
 
 # Load .RData file -------------------------------------------------------------
 
-# load('sentence_bert_models.RData')
+# If you have run the entire code before, you can load the .RData file here
+# If this is the first time running this code, ignore the load() function
+# and the four summary() functions that follow. 
+load('sentence_bert_models.RData')
 
 # Mixed Effects Model for the all-mpnet-base-v2 model --------------------------
 
@@ -121,6 +124,20 @@ mixed(cosine ~ 1 + gender + (1|format),
                             calc.derivs = FALSE),
       method = "LRT")
 
+# Model examining both race/ethnicity and gender
+mpnetbase.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                              data = mpnetbase, 
+                              control = lmerControl(optimizer = "nmkbw",
+                                                    calc.derivs = FALSE))
+
+summary(mpnetbase.race.gender)
+
+# Log likelihood of the four models (M1 ~ M4)
+logLik(mpnetbase.race)
+logLik(mpnetbase.gender)
+logLik(mpnetbase.race.gender)
+logLik(mpnetbase.model)
+
 # Mixed Effects Model for the all_distilroberta_v1 model -----------------------
 
 # Fit mixed effects model with three fixed effects and one random effect
@@ -194,6 +211,20 @@ mixed(cosine ~ 1 + gender + (1|format),
       control = lmerControl(optimizer = "nmkbw", 
                             calc.derivs = FALSE),
       method = "LRT")
+
+# Model examining both race/ethnicity and gender
+distilroberta.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                                  data = distilroberta, 
+                                  control = lmerControl(optimizer = "nmkbw",
+                                                        calc.derivs = FALSE))
+
+summary(distilroberta.race.gender)
+
+# Log likelihood of the four models (M1 ~ M4)
+logLik(distilroberta.race)
+logLik(distilroberta.gender)
+logLik(distilroberta.race.gender)
+logLik(distilroberta.model)
 
 # Mixed Effects Model for the all-MiniLM-L12-v2 model --------------------------
 
@@ -269,6 +300,22 @@ mixed(cosine ~ 1 + gender + (1|format),
                             calc.derivs = FALSE),
       method = "LRT")
 
+# Model examining both race/ethnicity and gender
+allminilm.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                              data = allminilm, 
+                              control = lmerControl(optimizer = "nmkbw",
+                                                    calc.derivs = FALSE))
+
+summary(allminilm.race.gender)
+
+# Log likelihood of the four models (M1 ~ M4)
+logLik(allminilm.race)
+logLik(allminilm.gender)
+logLik(allminilm.race.gender)
+logLik(allminilm.model)
+
 # Save as .RData ---------------------------------------------------------------
 
+# Save all the models as an .RData file
+# rm(i, simple_prep)
 save.image('sentence_bert_models.RData')
