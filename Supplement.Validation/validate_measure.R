@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 10 Sept 2023
+## Script date: 15 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -81,5 +81,54 @@ asian_mean <- mean(amc)
 hispanic_mean <- mean(hmc)
 white_mean <- mean(wmc)
 
-# Tally the number of stories coded as 1
-stories %>% group_by(race) %>% summarise(count = sum(hardship))
+# Tally the number of pairs
+stories_subset <- stories %>% select(c(race, hardship))
+
+black_ss <- stories_subset %>% filter(race == "African") %>% select(hardship)
+asian_ss <- stories_subset %>% filter(race == "Asian") %>% select(hardship)
+hispanic_ss <- stories_subset %>% filter(race == "Hispanic") %>% select(hardship)
+white_ss <- stories_subset %>% filter(race == "White") %>% select(hardship)
+
+black_pairs <- combn(black_ss$hardship, 2)
+black_df <- data.frame(Var1 = black_pairs[1, ], Var2 = black_pairs[2, ])
+black_df %>% 
+  mutate(class = case_when(
+    Var1 == 0 & Var2 == 0 ~ 0,
+    Var1 == 1 & Var2 == 1 ~ 1,
+    Var1 == 0 & Var2 == 1 ~ 2,
+    Var1 == 1 & Var2 == 0 ~ 2)) %>%
+  group_by(class) %>%
+  summarize(n = n())
+
+asian_pairs <- combn(asian_ss$hardship, 2)
+asian_df <- data.frame(Var1 = asian_pairs[1, ], Var2 = asian_pairs[2, ])
+asian_df %>% 
+  mutate(class = case_when(
+    Var1 == 0 & Var2 == 0 ~ 0,
+    Var1 == 1 & Var2 == 1 ~ 1,
+    Var1 == 0 & Var2 == 1 ~ 2,
+    Var1 == 1 & Var2 == 0 ~ 2)) %>%
+  group_by(class) %>%
+  summarize(n = n())
+
+hispanic_pairs <- combn(hispanic_ss$hardship, 2)
+hispanic_df <- data.frame(Var1 = hispanic_pairs[1, ], Var2 = hispanic_pairs[2, ])
+hispanic_df %>% 
+  mutate(class = case_when(
+    Var1 == 0 & Var2 == 0 ~ 0,
+    Var1 == 1 & Var2 == 1 ~ 1,
+    Var1 == 0 & Var2 == 1 ~ 2,
+    Var1 == 1 & Var2 == 0 ~ 2)) %>%
+  group_by(class) %>%
+  summarize(n = n())
+
+white_pairs <- combn(white_ss$hardship, 2)
+white_df <- data.frame(Var1 = white_pairs[1, ], Var2 = white_pairs[2, ])
+white_df %>% 
+  mutate(class = case_when(
+    Var1 == 0 & Var2 == 0 ~ 0,
+    Var1 == 1 & Var2 == 1 ~ 1,
+    Var1 == 0 & Var2 == 1 ~ 2,
+    Var1 == 1 & Var2 == 0 ~ 2)) %>%
+  group_by(class) %>%
+  summarize(n = n())
