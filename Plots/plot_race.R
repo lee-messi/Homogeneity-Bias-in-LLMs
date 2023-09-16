@@ -1,7 +1,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 9 Sept 2023
+## Script date: 15 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -18,16 +18,14 @@ load('all_models.RData')
 race_plot <- function(model){
   
   plot <- ggplot(model, aes(x = race, y = cosine, color = race)) + 
-    geom_point(stat = "summary", fun = "mean", 
-               position = position_dodge(0.5)) + 
-    geom_errorbar(stat = "summary", fun.data = "mean_se", 
-                  fun.args = list(mult = 1.96), 
-                  width = 0.15, position = position_dodge(0.5)) +
+    geom_hline(yintercept = 0.0, linetype = "dashed") + 
+    geom_point(stat = "summary", fun = "mean", size = 2, 
+               position = position_dodge(0.5)) +
     theme_bw() + 
     theme(legend.position = "none",
           strip.text.x = element_blank()) + 
     labs(x = "Racial/Ethnic Groups", 
-         y = "Cosine Similarity", 
+         y = "Standardized Cosine Similarity", 
          color = "Racial/Ethnic Groups") + 
     coord_cartesian(ylim = c(-0.40, 0.30)) +
     scale_color_aaas() + 
@@ -39,22 +37,26 @@ race_plot <- function(model){
   return(plot)
 }
 
-# Generate Plots for Each of the Models ----------------------------------------
+# Generate plot for BERT-2 -----------------------------------------------------
 
-race_1 <- race_plot(main_cosine_std)
-race_2 <- race_plot(s1_layer_cosine_std)
-race_3 <- race_plot(s2_roberta_cosine_std)
-race_4 <- race_plot(s3_roberta_layer_cosine_std)
-race_5 <- race_plot(s4_mpnetbase_cosine_std)
-race_6 <- race_plot(s4_distilroberta_cosine_std)
-race_7 <- race_plot(s4_allminilm_cosine_std)
+race_plot(main_cosine_std)
+# ggsave("cosine_race_main.jpg", width = 8, height = 3, dpi = "retina")
+ggsave("cosine_race_main.pdf", width = 8, height = 3, dpi = "retina")
 
-# Arrange and Save Plot(s) -----------------------------------------------------
+# All Plots in One Row ---------------------------------------------------------
 
-ggarrange(race_1, race_2, race_3, race_4, race_5, race_6, race_7,
-          labels = c("A", "B", "C", "D", "E", "F", "G"),
-          ncol = 2, nrow = 4, 
-          common.legend = T)
+ggplot(all_models, aes(x = model, y = cosine, color = race)) + 
+  geom_point(stat = "summary", fun = "mean", size = 2,
+             position = position_dodge(1)) + 
+  facet_grid(.~model, scales = "free_x") + 
+  theme_bw() + 
+  theme(legend.position = "top",
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank()) + 
+  labs(x = "Model Specification", 
+       y = "Standardized Cosine Similarity", 
+       color = "Racial/Ethnic Group") + 
+  coord_cartesian(ylim = c(-0.40, 0.30)) +
+  scale_color_aaas()
 
-ggsave("cosine_race.jpg", width = 8, height = 9, dpi = "retina")
-ggsave("cosine_race.pdf", width = 8, height = 9, dpi = "retina")
+ggsave("cosine_race_seven.jpg", width = 9, height = 4, dpi = "retina")

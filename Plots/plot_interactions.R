@@ -1,7 +1,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 9 Sept 2023
+## Script date: 15 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -13,49 +13,54 @@ if(!require("ggpubr")){install.packages("ggpubr", dependencies = TRUE); require(
 
 load('all_models.RData')
 
+# Create a new column specifying the model in which the data is from
+main_cosine_std <- main_cosine_std %>% mutate(model = "BERT-2")
+s1_layer_cosine_std <- s1_layer_cosine_std %>% mutate(model = "BERT-3")
+s2_roberta_cosine_std <- s2_roberta_cosine_std %>% mutate(model = "RoBERTa-2")
+s3_roberta_layer_cosine_std <- s3_roberta_layer_cosine_std %>% mutate(model = "RoBERTa-3")
+s4_mpnetbase_cosine_std <- s4_mpnetbase_cosine_std %>% mutate(model = "all-mpnet-base-v2")
+s4_distilroberta_cosine_std <- s4_distilroberta_cosine_std %>% mutate(model = "all-distilroberta-v1")
+s4_allminilm_cosine_std <- s4_allminilm_cosine_std %>% mutate(model = "all-MiniLM-L12-v2")
+
+# Concatenate the seven data frames into a single large data frame
+all_models <- rbind(main_cosine_std, s1_layer_cosine_std,
+                    s2_roberta_cosine_std, s3_roberta_layer_cosine_std,
+                    s4_mpnetbase_cosine_std, s4_distilroberta_cosine_std,
+                    s4_allminilm_cosine_std)
+
+unique(all_models$race)
+
+all_models <- all_models %>% 
+  mutate(model = as.factor(model)) %>%
+  mutate(model = fct_relevel(model, c("BERT-2", "BERT-3", 
+                                      "RoBERTa-2", "RoBERTa-3",
+                                      "all-mpnet-base-v2",
+                                      "all-distilroberta-v1",
+                                      "all-MiniLM-L12-v2"))) %>%
+  mutate(race = as.factor(race)) %>%
+  mutate(race = fct_relevel(race, c("African Americans", 
+                                      "Asian Americans", 
+                                      "Hispanic Americans", 
+                                      "White Americans"))) %>%
+  arrange(model)
+
 # Define Function to Generate Interaction Effect Plots -------------------------
 
-interaction_plot <- function(model){
-  
-  plot <- ggplot(model, aes(x = race, y = cosine, color = gender)) + 
-    geom_point(stat = "summary", fun = "mean", 
-               position = position_dodge(0.5)) + 
-    geom_errorbar(stat = "summary", fun.data = "mean_se", 
-                  fun.args = list(mult = 1.96), 
-                  width = 0.15, position = position_dodge(0.5)) +
-    facet_grid(.~race, scales = "free_x") + 
-    theme_bw() + 
-    theme(legend.position = "top",
-          strip.text.x = element_blank()) + 
-    labs(x = "Racial/Ethnic Groups", 
-         y = "Cosine Similarity", 
-         color = "Gender Groups") + 
-    coord_cartesian(ylim = c(-0.40, 0.30)) +
-    scale_color_aaas() + 
-    scale_x_discrete(labels = c("White Americans" = "White\nAmericans", 
-                                "African Americans" = "African\nAmericans", 
-                                "Asian Americans" = "Asian\nAmericans", 
-                                "Hispanic Americans" = "Hispanic\nAmericans"))
-  
-  return(plot)
-}
+ggplot(all_models, aes(x = model, y = cosine, color = gender)) + 
+  geom_hline(yintercept = 0.0, linetype = "dashed") + 
+  geom_point(stat = "summary", fun = "mean", 
+             position = position_dodge(0.75)) + 
+  facet_grid(race~model, scales = "free_x") + 
+  theme_bw() + 
+  theme(legend.position = "top",
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank()) + 
+  labs(x = "Model Specification", 
+       y = "Standardized Cosine Similarity", 
+       color = "Gender Groups") + 
+  coord_cartesian(ylim = c(-0.40, 0.30)) +
+  scale_color_aaas()
 
-# Generate Plots for Each of the Models ----------------------------------------
-
-int_1 <- interaction_plot(main_cosine_std)
-int_2 <- interaction_plot(s1_layer_cosine_std)
-int_3 <- interaction_plot(s2_roberta_cosine_std)
-int_4 <- interaction_plot(s3_roberta_layer_cosine_std)
-int_5 <- interaction_plot(s4_mpnetbase_cosine_std)
-int_6 <- interaction_plot(s4_distilroberta_cosine_std)
-int_7 <- interaction_plot(s4_allminilm_cosine_std)
-
-# Arrange and Save Plot(s) -----------------------------------------------------
-
-ggarrange(int_1, int_2, int_3, int_4, int_5, int_6, int_7,
-          labels = c("A", "B", "C", "D", "E", "F", "G"),
-          ncol = 2, nrow = 4, 
-          common.legend = T)
-
-ggsave("cosine_interaction.jpg", width = 8, height = 9, dpi = "retina")
-ggsave("cosine_interaction.pdf", width = 8, height = 9, dpi = "retina")
+# Save plot
+# ggsave("cosine_interaction.jpg", width = 9, height = 6, dpi = "retina")
+ggsave("cosine_interaction.pdf", width = 10, height = 6, dpi = "retina")
