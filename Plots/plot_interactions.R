@@ -1,7 +1,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 15 Sept 2023
+## Script date: 26 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -44,7 +44,7 @@ all_models <- all_models %>%
                                       "White Americans"))) %>%
   arrange(model)
 
-# Define Function to Generate Interaction Effect Plots -------------------------
+# Interaction Plot for All Model Specifications --------------------------------
 
 ggplot(all_models, aes(x = model, y = cosine, color = gender)) + 
   geom_hline(yintercept = 0.0, linetype = "dashed") + 
@@ -62,5 +62,23 @@ ggplot(all_models, aes(x = model, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-# ggsave("cosine_interaction.jpg", width = 9, height = 6, dpi = "retina")
-ggsave("cosine_interaction.pdf", width = 10, height = 6, dpi = "retina")
+ggsave("all_models_interaction.pdf", width = 10, height = 6, dpi = "retina")
+
+# Interaction Plot for BERT-2 --------------------------------------------------
+
+ggplot(main_cosine_std, aes(x = race, y = cosine, color = gender)) + 
+  geom_hline(yintercept = 0.0, linetype = "dashed") + 
+  geom_point(stat = "summary", fun = "mean", 
+             position = position_dodge(0.75)) + 
+  theme_bw() + 
+  theme(legend.position = "top",
+        axis.title.x = element_blank()) + 
+  labs(x = "Racial/Ethnic Groups", 
+       y = "Standardized Cosine Similarity", 
+       color = "Gender Groups") + 
+  coord_cartesian(ylim = c(-0.40, 0.30)) +
+  scale_color_aaas()
+
+# Save plot
+ggsave("cosine_interaction.pdf", width = 9, height = 4, dpi = "retina")
+
