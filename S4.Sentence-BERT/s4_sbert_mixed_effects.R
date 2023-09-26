@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 14 Sept 2023
+## Script date: 25 Sept 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -98,13 +98,6 @@ summary(mpnetbase.race)$coefficients[2, "df"]
 summary(mpnetbase.race)$coefficients[3, "df"]
 summary(mpnetbase.race)$coefficients[4, "df"]
 
-# Perform Likelihood ratio test for the main effect of race/ethnicity
-mixed(cosine ~ 1 + race + (1|format),
-      data = mpnetbase, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
-
 # Fit simplified model for gender
 mpnetbase.gender <- lmer(cosine ~ 1 + gender + (1|format), 
                          data = mpnetbase, 
@@ -116,13 +109,6 @@ summary(mpnetbase.gender)
 
 # Report degrees of freedom for t-statistics
 summary(mpnetbase.gender)$coefficients[2, "df"]
-
-# Perform Likelihood ratio test for the main effect of gender
-mixed(cosine ~ 1 + gender + (1|format),
-      data = mpnetbase, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
 
 # Model examining both race/ethnicity and gender
 mpnetbase.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
@@ -186,13 +172,6 @@ summary(distilroberta.race)$coefficients[2, "df"]
 summary(distilroberta.race)$coefficients[3, "df"]
 summary(distilroberta.race)$coefficients[4, "df"]
 
-# Perform Likelihood ratio test for the main effect of race/ethnicity
-mixed(cosine ~ 1 + race + (1|format),
-      data = distilroberta, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
-
 # Fit simplified model for gender
 distilroberta.gender <- lmer(cosine ~ 1 + gender + (1|format), 
                              data = distilroberta, 
@@ -204,13 +183,6 @@ summary(distilroberta.gender)
 
 # Report degrees of freedom for t-statistics
 summary(distilroberta.gender)$coefficients[2, "df"]
-
-# Perform Likelihood ratio test for the main effect of gender
-mixed(cosine ~ 1 + gender + (1|format),
-      data = distilroberta, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
 
 # Model examining both race/ethnicity and gender
 distilroberta.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
@@ -274,13 +246,6 @@ summary(allminilm.race)$coefficients[2, "df"]
 summary(allminilm.race)$coefficients[3, "df"]
 summary(allminilm.race)$coefficients[4, "df"]
 
-# Perform Likelihood ratio test for the main effect of race/ethnicity
-mixed(cosine ~ 1 + race + (1|format),
-      data = allminilm, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
-
 # Fit simplified model for gender
 allminilm.gender <- lmer(cosine ~ 1 + gender + (1|format), 
                          data = allminilm, 
@@ -292,13 +257,6 @@ summary(allminilm.gender)
 
 # Report degrees of freedom for t-statistics
 summary(allminilm.gender)$coefficients[2, "df"]
-
-# Perform Likelihood ratio test for the main effect of gender
-mixed(cosine ~ 1 + gender + (1|format),
-      data = allminilm, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
 
 # Model examining both race/ethnicity and gender
 allminilm.race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 

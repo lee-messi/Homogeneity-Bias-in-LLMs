@@ -221,13 +221,6 @@ summary(race.effect)$coefficients[2, "df"]
 summary(race.effect)$coefficients[3, "df"]
 summary(race.effect)$coefficients[4, "df"]
 
-# Perform Likelihood ratio test for the main effect of race/ethnicity
-mixed(cosine ~ 1 + race + (1|format),
-      data = cosine_std, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
-
 # Model examining the main effect of gender
 gender.effect <- lmer(cosine ~ 1 + gender + (1|format), 
                       data = cosine_std, 
@@ -239,13 +232,6 @@ summary(gender.effect)
 
 # Report degrees of freedom for t-statistics
 summary(gender.effect)$coefficients[2, "df"]
-
-# Perform Likelihood ratio test for the main effect of gender
-mixed(cosine ~ 1 + gender + (1|format),
-      data = cosine_std, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
 
 # Model examining both race/ethnicity and gender
 race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
