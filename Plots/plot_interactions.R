@@ -62,13 +62,13 @@ ggplot(all_models, aes(x = model, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-ggsave("all_models_interaction.pdf", width = 10, height = 6, dpi = "retina")
+ggsave("all_interactions.pdf", width = 10, height = 6, dpi = "retina")
 
 # Interaction Plot for BERT-2 --------------------------------------------------
 
 ggplot(main_cosine_std, aes(x = race, y = cosine, color = gender)) + 
   geom_hline(yintercept = 0.0, linetype = "dashed") + 
-  geom_point(stat = "summary", fun = "mean", 
+  geom_point(size = 2, stat = "summary", fun = "mean", 
              position = position_dodge(0.75)) + 
   theme_bw() + 
   theme(legend.position = "top",
@@ -80,5 +80,5 @@ ggplot(main_cosine_std, aes(x = race, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-ggsave("cosine_interaction.pdf", width = 9, height = 4, dpi = "retina")
+ggsave("cosine_interaction.pdf", width = 6, height = 3, dpi = "retina")
 

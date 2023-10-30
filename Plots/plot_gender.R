@@ -37,7 +37,7 @@ gender_plot <- function(model){
 
 gender_plot(main_cosine_std)
 # ggsave("cosine_gender_main.jpg", width = 8, height = 3, dpi = "retina")
-ggsave("cosine_gender_main.pdf", width = 8, height = 3, dpi = "retina")
+ggsave("cosine_gender_main.pdf", width = 6, height = 3, dpi = "retina")
 
 # Alternative Plots ------------------------------------------------------------
 

@@ -41,7 +41,7 @@ race_plot <- function(model){
 
 race_plot(main_cosine_std)
 # ggsave("cosine_race_main.jpg", width = 8, height = 3, dpi = "retina")
-ggsave("cosine_race_main.pdf", width = 8, height = 3, dpi = "retina")
+ggsave("cosine_race_main.pdf", width = 6, height = 3, dpi = "retina")
 
 # All Plots in One Row ---------------------------------------------------------
 
