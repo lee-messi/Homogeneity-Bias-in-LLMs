@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 15 Sept 2023
+## Script date: 29 Oct 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -13,7 +13,7 @@ if(!require("effectsize")){install.packages("effectsize", dependencies = TRUE); 
 if(!require("effsize")){install.packages("effsize", dependencies = TRUE); require("effsize")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 
-# Initilize the text Package ---------------------------------------------------
+# Initialize the text Package ---------------------------------------------------
 
 # textrpp_install()
 # textrpp_initialize(save_profile = TRUE)
