@@ -53,15 +53,17 @@ fit <- stm(documents = out$documents,
            init.type = "Spectral", 
            seed = 1048596)
 
-save.image('stm.RData')
-# load('stm.RData')
+# Save as RData file ------------------------------------------------------------
+
+# save.image('stm.RData')
+load('stm.RData')
 labelTopics(fit)
 
 pdf(file = "frex_words.pdf", width = 10, height = 6) 
 plot.STM(fit, n = 5)
 dev.off()
 
-# Create a Dataframe of Thetas -------------------------------------------------
+# Create a dataframe of thetas -------------------------------------------------
 
 theta.values <- fit$theta
 theta.with.race <- data.frame(theta.values, race = meta$race)
@@ -108,6 +110,23 @@ data.with.topic %>% filter(topic == 1 | topic == 10) %>% group_by(race) %>% summ
 prop.test(x = c(5442, 464), n = c(13000, 13000), alternative = "greater")$statistic
 prop.test(x = c(3400, 464), n = c(13000, 13000), alternative = "greater")$statistic
 prop.test(x = c(2425, 464), n = c(13000, 13000), alternative = "greater")$statistic
+
+# Calculate the proportion of texts in the top 1 to 4 topics by group ----------
+
+topic_frequencies <- data.with.topic %>% group_by(race, topic) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  group_by(race) %>%
+  mutate(probability = count / sum(count))
+
+n = 5  # Replace 5 with the number of top topics you want
+
+top_topics <- topic_frequencies %>%
+  group_by(race) %>%
+  slice_max(order_by = probability, n = n)
+
+top_topics %>%
+  group_by(race) %>%
+  summarise(sum_probability = sum(probability))
 
 # Visualize the Theta Values by Racial/Ethnic Group ----------------------------
 
