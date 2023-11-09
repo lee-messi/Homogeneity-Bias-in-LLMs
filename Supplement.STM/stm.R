@@ -2,13 +2,14 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 29 Oct 2023
+## Script date: 8 Nov 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("stm")){install.packages("stm", dependencies = TRUE); require("stm")}
 if(!require("reshape2")){install.packages("reshape2", dependencies = TRUE); require("reshape2")}
+if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 
 # Load Generated Text ----------------------------------------------------------
 
@@ -53,8 +54,12 @@ fit <- stm(documents = out$documents,
            seed = 1048596)
 
 save.image('stm.RData')
+# load('stm.RData')
 labelTopics(fit)
+
+pdf(file = "frex_words.pdf", width = 10, height = 6) 
 plot.STM(fit, n = 5)
+dev.off()
 
 # Create a Dataframe of Thetas -------------------------------------------------
 
@@ -81,7 +86,7 @@ ggplot(theta.long.plot.df, aes(x = topic, y = theta, fill = topic)) +
   geom_violin() +
   facet_grid(race ~ topic, scales="free", space="free") +
   theme_minimal() +
-  labs(title="Distribution of Topics by Racial/Ethnic Groups",
+  labs(title="Distribution of Topics by Racial/Ethnic Group",
        y="Theta Values",
        x="Topics") +
   theme(axis.text.x=element_text(angle=45),
@@ -90,27 +95,62 @@ ggplot(theta.long.plot.df, aes(x = topic, y = theta, fill = topic)) +
 
 ggsave("stm_violin_plot.png", width = 6, height = 6, dpi = "retina")
 
-# Store the theta values as individual lists -----------------------------------
+# Identify topic of the text and make it a new column --------------------------
 
-african.thetas <- theta.with.race.long %>% 
-  filter(race == "African") %>%
-  pull(theta)
+max_index_list <- apply(theta.with.race[,1:15], 1, function(row) which.max(row))
+data.with.topic <- data %>% mutate(topic = max_index_list)
 
-asian.thetas <- theta.with.race.long %>% 
-  filter(race == "Asian") %>%
-  pull(theta)
+# Compare proportions of texts about topic 1 or 10 -----------------------------
 
-hispanic.thetas <- theta.with.race.long %>%
-  filter(race == "Hispanic") %>%
-  pull(theta)
+data.with.topic %>% group_by(race) %>% summarize(n = n())
+data.with.topic %>% filter(topic == 1 | topic == 10) %>% group_by(race) %>% summarize(n = n())
 
-white.thetas <- theta.with.race.long %>%
-  filter(race == "White") %>%
-  pull(theta)
+prop.test(x = c(5442, 464), n = c(13000, 13000), alternative = "greater")$statistic
+prop.test(x = c(3400, 464), n = c(13000, 13000), alternative = "greater")$statistic
+prop.test(x = c(2425, 464), n = c(13000, 13000), alternative = "greater")$statistic
+
+# Visualize the Theta Values by Racial/Ethnic Group ----------------------------
+
+data.with.topic <- data.with.topic %>% 
+  mutate(race = case_when(race == "African" ~ "African Americans", 
+                          race == "Asian" ~ "Asian Americans", 
+                          race == "Hispanic" ~ "Hispanic Americans", 
+                          race == "White" ~ "White Americans")) %>%
+  mutate(race = as.factor(race)) %>%
+  mutate(race = relevel(race, ref = "White Americans"))
+ 
+ggplot(data.with.topic, aes(x = topic, fill = race)) +
+  geom_density(alpha = 0.6) + 
+  theme_minimal() +
+  scale_x_discrete(limits = levels(factor(data.with.topic$topic))) + 
+  labs(title="Distribution of Topics by Racial/Ethnic Group",
+       y="Proportion of Texts",
+       x="Topics", 
+       fill = "Race/Ethnicity") +
+  theme(plot.title = element_text(hjust = 0.5), 
+        legend.position = "bottom", 
+        legend.title = element_blank(), 
+        title = element_text(size = 15), 
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        legend.text = element_text(size = 15)) + 
+  scale_fill_aaas()
+
+ggsave("stm_topic_distributions.pdf", width = 10, height = 6, dpi = "retina")
 
 # Perform F tests to compare variances -----------------------------------------
 
-var.test(white.thetas, african.thetas, alternative = "greater")
-var.test(white.thetas, asian.thetas, alternative = "greater")
-var.test(white.thetas, hispanic.thetas, alternative = "greater")
+african.topics <- data.with.topic %>% filter(race == "African Americans") %>% pull(topic)
+asian.topics <- data.with.topic %>% filter(race == "Asian Americans") %>% pull(topic)
+hispanic.topics <- data.with.topic %>% filter(race == "Hispanic Americans") %>% pull(topic)
+white.topics <- data.with.topic %>% filter(race == "White Americans") %>% pull(topic)
 
+var.test(african.topics, white.topics, alternative = "greater")
+var.test(asian.topics, white.topics, alternative = "greater")
+var.test(hispanic.topics, white.topics, alternative = "greater")
+
+# Compare homogeneity within Topic 1 and 10 texts ------------------------------
+
+topic.1 <- data.with.topic %>% filter(topic == 1)
+topic.1 %>% group_by(race) %>% summarize(n = n())
+write.csv(topic.1, "topic_1.csv", row.names = FALSE)
