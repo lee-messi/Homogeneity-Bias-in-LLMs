@@ -2,9 +2,9 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 25 Sept 2023
+## Script date: 8 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("text")){install.packages("text", dependencies = TRUE); require("text")}
@@ -13,14 +13,15 @@ if(!require("lme4")){install.packages("lme4", dependencies = TRUE); require("lme
 if(!require("lmerTest")){install.packages("lmerTest", dependencies = TRUE); require("lmerTest")}
 if(!require("afex")){install.packages("afex", dependencies = TRUE); require("afex")}
 if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); require("emmeans")}
+if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 
-# Initilize the text Package ---------------------------------------------------
+# Initilize the text package ---------------------------------------------------
 
 # textrpp_install()
 # textrpp_initialize(save_profile = TRUE)
 # ?textrpp_initialize
 
-# Define Preprocessing Steps ---------------------------------------------------
+# Define preprocessing steps ---------------------------------------------------
 
 simple_prep = function(x) {
   x = str_to_lower(x) # make text lower case
@@ -30,10 +31,20 @@ simple_prep = function(x) {
 
 # Load Stories -----------------------------------------------------------------
 
-stories <- read.csv('../data/generated_text_final.csv') %>%
+stories <- read.csv('Original/suppression_study_1.csv') %>%
   mutate(text = simple_prep(text))
 
-# Separate Stories by Gender, Racial/Ethnic Group, and Text Format -------------
+# Count the number of texts containing adversity-related keywords
+keywords <- c("adversity", "barrier")
+
+stories %>% filter(race %in% c("African", "Asian", "Hispanic")) %>% 
+  mutate(contains = str_detect(text, paste(keywords, collapse = "|"))) %>% 
+  pull(contains) %>% sum()
+
+# Total number of texts about African, Asian, and Hispanic Americans
+stories %>% filter(race %in% c("African", "Asian", "Hispanic")) %>% nrow()
+
+# Separate stories by gender, racial/ethnic group, and text format -------------
 
 black_males <- stories %>% 
   filter(gender == "man" & race == "African") %>% 
@@ -75,7 +86,7 @@ white_females <- stories %>%
   mutate(gender = "Woman") %>% mutate(race = "White Americans") %>% 
   group_split(format)
 
-# Calculate Cosine Similarity between Sentence Embeddings for each Text Format -
+# Calculate cosine similarity between sentence embeddings for each text format -
 
 bmc <- bfc <- amc <- afc <- hmc <- hfc <- wmc <- wfc <- list()
 
@@ -86,16 +97,12 @@ for (i in black_males){
   bmc <- append(bmc, list(bm.cosines[upper.tri(bm.cosines)]))
 }
 
-gc()
-
 for (i in black_females){
   bf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
   bf.embeds <- as.matrix(bf.embeddings[['texts']]$text)
   bf.cosines <- sim2(bf.embeds)
   bfc <- append(bfc, list(bf.cosines[upper.tri(bf.cosines)]))
 }
-
-gc()
 
 for (i in asian_males){
   am.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
@@ -104,16 +111,12 @@ for (i in asian_males){
   amc <- append(amc, list(am.cosines[upper.tri(am.cosines)]))
 }
 
-gc()
-
 for (i in asian_females){
   af.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
   af.embeds <- as.matrix(af.embeddings[['texts']]$text)
   af.cosines <- sim2(af.embeds)
   afc <- append(afc, list(af.cosines[upper.tri(af.cosines)]))
 }
-
-gc()
 
 for (i in hispanic_males){
   hm.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
@@ -122,8 +125,6 @@ for (i in hispanic_males){
   hmc <- append(hmc, list(hm.cosines[upper.tri(hm.cosines)]))
 }
 
-gc()
-
 for (i in hispanic_females){
   hf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
   hf.embeds <- as.matrix(hf.embeddings[['texts']]$text)
@@ -131,16 +132,12 @@ for (i in hispanic_females){
   hfc <- append(hfc, list(hf.cosines[upper.tri(hf.cosines)]))
 }
 
-gc()
-
 for (i in white_males){
   wm.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
   wm.embeds <- as.matrix(wm.embeddings[['texts']]$text)
   wm.cosines <- sim2(wm.embeds)
   wmc <- append(wmc, list(wm.cosines[upper.tri(wm.cosines)]))
 }
-
-gc()
 
 for (i in white_females){
   wf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
@@ -182,30 +179,11 @@ cosine_df <- cosine_df %>%
   mutate(race = relevel(race, ref = "White Americans")) %>%
   mutate(gender = relevel(gender, ref = "Man"))
 
-# Load .RData file -------------------------------------------------------------
-
-# If you have run the entire code before, you can load the .RData file here
-# If this is the first time running this code, ignore the load() function
-# and the four summary() function that follow. 
-load("main_bert_cosine.RData")
-
-# Summary output of the four models (M1 ~ M4)
-summary(race.effect)
-summary(gender.effect)
-summary(race.gender)
-summary(cosine.model)
-
-# Log likelihood of the four models (M1 ~ M4)
-logLik(race.effect)
-logLik(gender.effect)
-logLik(race.gender)
-logLik(cosine.model)
-
-# Build mixed effects model including the main effects -------------------------
-
 # Standardize cosine similarity before fitting mixed-effects models
 cosine_std <- cosine_df %>% 
   mutate(across(where(is.numeric), scale))
+
+# Build mixed effects model including the main effects -------------------------
 
 # Model examining the main effect of race/ethnicity
 race.effect <- lmer(cosine ~ 1 + race + (1|format), 
@@ -221,62 +199,36 @@ summary(race.effect)$coefficients[2, "df"]
 summary(race.effect)$coefficients[3, "df"]
 summary(race.effect)$coefficients[4, "df"]
 
-# Model examining the main effect of gender
-gender.effect <- lmer(cosine ~ 1 + gender + (1|format), 
-                      data = cosine_std, 
-                      control = lmerControl(optimizer = "nmkbw", 
-                                            calc.derivs = FALSE))
-
-# Report coefficients
-summary(gender.effect)
-
-# Report degrees of freedom for t-statistics
-summary(gender.effect)$coefficients[2, "df"]
-
-# Model examining both race/ethnicity and gender
-race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
-                    data = cosine_std, 
-                    control = lmerControl(optimizer = "nmkbw", 
-                                          calc.derivs = FALSE))
-
-summary(race.gender)
-
-# Build mixed effects model including interactions (Supplement) ----------------
-
-cosine.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
-                     data = cosine_std, 
-                     control = lmerControl(optimizer = "nmkbw", 
-                                           calc.derivs = FALSE))
-
-# Report coefficients
-summary(cosine.model)
-
-# Report degrees of freedom for t-statistics (race/ethnicity)
-summary(cosine.model)$coefficients[2, "df"]
-summary(cosine.model)$coefficients[3, "df"]
-summary(cosine.model)$coefficients[4, "df"]
-# Report degrees of freedom for t-statistics (gender)
-summary(cosine.model)$coefficients[5, "df"]
-# Report degrees of freedom for t-statistics (interaction effect)
-summary(cosine.model)$coefficients[6, "df"]
-summary(cosine.model)$coefficients[7, "df"]
-summary(cosine.model)$coefficients[8, "df"]
-
 # Perform likelihood ratio test for all fixed effects
-mixed(cosine ~ 1 + race * gender + (1|format),
+mixed(cosine ~ 1 + race + (1|format),
       data = cosine_std, 
       control = lmerControl(optimizer = "nmkbw", 
                             calc.derivs = FALSE),
       method = "LRT")
 
-# Conduct pairwise comparisons -------------------------------------------------
-
-cosine.interactions <- emmeans(cosine.model, ~ race * gender)
-pairs(cosine.interactions, simple = "gender")
-pairs(cosine.interactions, simple = "race")
-
 # Save as .RData ---------------------------------------------------------------
 
-# Save all the models as an .RData file
-# rm(i, simple_prep)
-save.image('main_bert_cosine.RData')
+# save.image("suppression_study_1_cosines.RData")
+load("suppression_study_1_cosines.RData")
+
+# Plot the effect of race/ethnicity --------------------------------------------
+
+ggplot(cosine_std, aes(x = race, y = cosine, color = race)) + 
+  geom_hline(yintercept = 0.0, linetype = "dashed") + 
+  geom_point(stat = "summary", fun = "mean", size = 2, 
+             position = position_dodge(0.5)) +
+  theme_bw() + 
+  theme(legend.position = "none",
+        strip.text.x = element_blank()) + 
+  labs(x = "Racial/Ethnic Groups", 
+       y = "Standardized Cosine Similarity", 
+       color = "Racial/Ethnic Groups") + 
+  coord_cartesian(ylim = c(-0.40, 0.30)) +
+  scale_color_aaas() + 
+  scale_x_discrete(labels = c("White Americans" = "White\nAmericans", 
+                              "African Americans" = "African\nAmericans", 
+                              "Asian Americans" = "Asian\nAmericans", 
+                              "Hispanic Americans" = "Hispanic\nAmericans"))
+
+ggsave("suppression_study_1_race.png", width = 6, height = 3, dpi = "retina")
+

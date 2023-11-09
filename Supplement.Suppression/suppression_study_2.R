@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 2 Nov 2023
+## Script date: 9 Nov 2023
 
 # Install and/or load packages -------------------------------------------------
 
@@ -13,6 +13,8 @@ if(!require("lme4")){install.packages("lme4", dependencies = TRUE); require("lme
 if(!require("lmerTest")){install.packages("lmerTest", dependencies = TRUE); require("lmerTest")}
 if(!require("afex")){install.packages("afex", dependencies = TRUE); require("afex")}
 if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); require("emmeans")}
+if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
+if(!require("hmisc")){install.packages("hmisc", dependencies = TRUE); require("hmisc")}
 
 # Initilize the text package ---------------------------------------------------
 
@@ -30,15 +32,18 @@ simple_prep = function(x) {
 
 # Load text --------------------------------------------------------------------
 
-stories <- read.csv('Original/generated_text_pilot.csv') %>%
+stories <- read.csv('Original/suppression_study_2.csv') %>%
   mutate(text = simple_prep(text))
 
 # Count the number of texts containing adversity-related keywords
-keywords <- c("adversity", "barrier", "stereotype")
-stories %>% filter(race %in% c("African", "Asian", "Hispanic")) %>% nrow()
+keywords <- c("adversity", "barrier")
+
 stories %>% filter(race %in% c("African", "Asian", "Hispanic")) %>% 
-  mutate(contains = str_detect(text, paste(keywords, collapse = "|"))) %>%
+  mutate(contains = str_detect(text, paste(keywords, collapse = "|"))) %>% 
   pull(contains) %>% sum()
+
+# Total number of texts about African, Asian, and Hispanic Americans
+stories %>% filter(race %in% c("African", "Asian", "Hispanic")) %>% nrow()
 
 # Separate stories by gender and racial/ethnic group  --------------------------
 
@@ -139,6 +144,11 @@ cosine_df <- cosine_df %>%
   mutate(race = relevel(race, ref = "White Americans")) %>%
   mutate(gender = relevel(gender, ref = "Man"))
 
+# Save as .RData ---------------------------------------------------------------
+
+# save.image("suppression_study_2_cosines.RData")
+load("suppression_study_2_cosines.RData")
+
 # Compare cosine similarity between racial/ethnic groups -----------------------
 
 t.test(cosine_df %>% filter(race == "African Americans") %>% pull(cosine), 
@@ -153,3 +163,29 @@ t.test(cosine_df %>% filter(race == "Hispanic Americans") %>% pull(cosine),
        cosine_df %>% filter(race == "White Americans") %>% pull(cosine), 
        alternative = "greater")
 
+# Plot the effect of race/ethnicity --------------------------------------------
+
+# Standardize cosine similarity before fitting mixed-effects models
+cosine_std <- cosine_df %>% 
+  mutate(across(where(is.numeric), scale))
+
+ggplot(cosine_std, aes(x = race, y = cosine, color = race)) + 
+  geom_hline(yintercept = 0.0, linetype = "dashed") + 
+  stat_summary(fun = mean, geom = "point", size = 2, 
+               position = position_dodge(0.5)) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2, 
+               position = position_dodge(0.5)) +
+  theme_bw() + 
+  theme(legend.position = "none",
+        strip.text.x = element_blank()) + 
+  labs(x = "Racial/Ethnic Groups", 
+       y = "Standardized Cosine Similarity", 
+       color = "Racial/Ethnic Groups") + 
+  coord_cartesian(ylim = c(-0.60, 0.60)) +
+  scale_color_aaas() + 
+  scale_x_discrete(labels = c("White Americans" = "White\nAmericans", 
+                              "African Americans" = "African\nAmericans", 
+                              "Asian Americans" = "Asian\nAmericans", 
+                              "Hispanic Americans" = "Hispanic\nAmericans"))
+
+ggsave("suppression_study_2_race.png", width = 6, height = 3, dpi = "retina")
