@@ -1,5 +1,5 @@
 # Instructions for Reproducing Analyses
-**Last Updated: 7 Sept 2023**
+**Last Updated: 10 Nov 2023**
 
 Any difficulties reproducing the analysis, please contact the corresponding author, [Messi H.J. Lee](mailto:hojunlee@wustl.edu). 
 
@@ -12,27 +12,27 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
      - Code used to identify non-compliant completions and to merge all completions (**merge_texts.R**)
      - Folder containing texts generated at initial round of data collection (**Original**)
 
-* Main
-     * Code used to conduct pre-registered analysis using mixed-effects models (**main_mixed_effects.R**)
+* BERT-2
+     * Code used to conduct pre-registered analysis using mixed-effects models (**bert2.R**)
 
 - Pre-Registration
      - Pre-registration documentation for the project (**Pre-Registration for The Effect of Group Status on the Variability of Group Representations in LLM-generated Text.docx**)
      - Documentation of vignettes used for data collection (**Vignettes for The Effect of Group Status on the Variability of Group Representations in LLM-generated Text.docx**)
 
-* S1.Layer
-     * Code used to conduct robustness checks using third to last layer of BERT (**s1_layer_mixed_effects.R**)
+* BERT-3
+     * Code used to conduct robustness checks using third to last layer of BERT (**bert3.R**)
 
-- S2.RoBERTa
-     - Code used to conduct robustness checks using second to last layer of RoBERTa (**s2_roberta_mixed_effects.R**)
+- RoBERTa-2
+     - Code used to conduct robustness checks using second to last layer of RoBERTa (**roberta2.R**)
 
-* S3.Layer.RoBERTa
-     * Code used to conduct robustness checks using third to last layer of RoBERTa (**s3_layer_roberta_mixed_effects.R**)
+* RoBERTa-3
+     * Code used to conduct robustness checks using third to last layer of RoBERTa (**roberta3.R**)
 
-- S4.Sentence-BERT
-     - Code used to generate sentence embeddings using Sentence-BERT models (**s4_sentence_bert.ipynb**)
-     - Code used to conduct robustness checks using using Sentence-BERT (**s4_sbert_mixed_effects.R**)
+- Sentence-BERT
+     - Code used to generate sentence embeddings using Sentence-BERT models (**sentence_bert.ipynb**)
+     - Code used to conduct robustness checks using using Sentence-BERT (**sentence_bert.R**)
 
-* S5.Preprocessing
+* Supplement.Preprocessing
      * Code used to test robustness of results to the pre-processing steps used on the generated text (**s5_preprocessing_mixed_effects.R**)
 
 ## Data Availability Statement
@@ -68,7 +68,7 @@ All code and data required for reproducing analyses are available in the reposit
 * Execute "generate_text.py” inside the "Original" subfolder of the "Data" folder. 
      - Enter your OpenAI API Key in line 10. 
      - Modify lines 26 and 69 to match the batch of texts being collected. In the first three rounds, set *num_iter* to 128 (the max value) and in the fourth round, set *num_iter* to 116. Modify .csv file name to match batch number. 
-     - This code uses the OpenAI API to generate texts using the pre-defined vignettes and saves them as .csv files inside the "Original" subfolder of the "Data" folder. 
+     - This code uses the OpenAI API to generate texts using the pre-defined vignettes (writing prompts) and saves them as .csv files inside the "Original" subfolder of the "Data" folder. 
 
 > **Merge Collected Data into a Single .csv File (Data)**
 * Open "merge_texts.R" using an IDE of your choice (we use RStudio). 
@@ -88,26 +88,26 @@ All code and data required for reproducing analyses are available in the reposit
 
 
 ### Mixed Effects Models
-> Mixed Effects Model using BERT<sub>-2</sub> (Main Folder)
-* Open "main_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using BERT<sub>-2</sub> (BERT-2 Folder)
+* Open "bert2.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using the second to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
 
-> Mixed Effects Model using BERT<sub>-3</sub> (S1.Layer Folder)
-* Open "s1_layer_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the third to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using BERT<sub>-3</sub> (BERT-3 Folder)
+* Open "bert3.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using the third to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
 
-> Mixed Effects Model using RoBERTa<sub>-2</sub> (S2.RoBERTa Folder)
-* Open "s2_roberta_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using RoBERTa<sub>-2</sub> (RoBERTa-2 Folder)
+* Open "roberta2.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using the second to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
 
-> Mixed Effects Model using RoBERTa<sub>-3</sub> (S3.Layer.RoBERTa Folder)
-* Open "s3_layer_roberta_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the third to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using RoBERTa<sub>-3</sub> (Roberta-3 Folder)
+* Open "roberta3.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using the third to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
 
-> Mixed Effects Model using Sentence-BERT Models (S4.Sentence-BERT Folder)
-* Open "s4_sbert_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using three different Sentence-BERT models, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using Sentence-BERT Models (Sentence-BERT Folder)
+* Open "sentence_bert.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using three different Sentence-BERT models, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
 
-> Mixed Effects Model using Extra Pre-processing Steps (S5.Preprocessing Folder)
-* Open "s5_preprocessing_mixed_effects.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of BERT having performed additional pre-processing steps on the data, calculates the cosine similarity between pairs of sentence embeddings within individual vignettes, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+> Mixed Effects Model using Extra Pre-processing Steps (Supplement.Preprocessing Folder)
+* Open "preprocessing.R" using an IDE of your choice (we use RStudio). 
+* This code generates sentence embeddings using the second to last layer of BERT having performed additional pre-processing steps on the data, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
