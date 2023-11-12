@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 25 Sept 2023
+## Script date: 10 Nov 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -23,7 +23,7 @@ if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); requir
 # Define Preprocessing Steps ---------------------------------------------------
 
 simple_prep = function(x) {
-  x = str_to_lower(x) # make text lower case
+  # x = str_to_lower(x) # we do not lower case as we use "roberta-base" model here
   x = str_replace_all(x, "[^[:alnum:]]", " ") # remove non-alphanumeric symbols
   x = str_replace_all(x, "\\s+", " ") # collapse multiple spaces
 }
@@ -80,7 +80,7 @@ white_females <- stories %>%
 bmc <- bfc <- amc <- afc <- hmc <- hfc <- wmc <- wfc <- list()
 
 for (i in black_males){
-  bm.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  bm.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   bm.embeds <- as.matrix(bm.embeddings[['texts']]$text)
   bm.cosines <- sim2(bm.embeds)
   bmc <- append(bmc, list(bm.cosines[upper.tri(bm.cosines)]))
@@ -89,7 +89,7 @@ for (i in black_males){
 gc()
 
 for (i in black_females){
-  bf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  bf.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   bf.embeds <- as.matrix(bf.embeddings[['texts']]$text)
   bf.cosines <- sim2(bf.embeds)
   bfc <- append(bfc, list(bf.cosines[upper.tri(bf.cosines)]))
@@ -98,7 +98,7 @@ for (i in black_females){
 gc()
 
 for (i in asian_males){
-  am.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  am.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   am.embeds <- as.matrix(am.embeddings[['texts']]$text)
   am.cosines <- sim2(am.embeds)
   amc <- append(amc, list(am.cosines[upper.tri(am.cosines)]))
@@ -107,7 +107,7 @@ for (i in asian_males){
 gc()
 
 for (i in asian_females){
-  af.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  af.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   af.embeds <- as.matrix(af.embeddings[['texts']]$text)
   af.cosines <- sim2(af.embeds)
   afc <- append(afc, list(af.cosines[upper.tri(af.cosines)]))
@@ -116,7 +116,7 @@ for (i in asian_females){
 gc()
 
 for (i in hispanic_males){
-  hm.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  hm.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   hm.embeds <- as.matrix(hm.embeddings[['texts']]$text)
   hm.cosines <- sim2(hm.embeds)
   hmc <- append(hmc, list(hm.cosines[upper.tri(hm.cosines)]))
@@ -125,7 +125,7 @@ for (i in hispanic_males){
 gc()
 
 for (i in hispanic_females){
-  hf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  hf.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   hf.embeds <- as.matrix(hf.embeddings[['texts']]$text)
   hf.cosines <- sim2(hf.embeds)
   hfc <- append(hfc, list(hf.cosines[upper.tri(hf.cosines)]))
@@ -134,7 +134,7 @@ for (i in hispanic_females){
 gc()
 
 for (i in white_males){
-  wm.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  wm.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   wm.embeds <- as.matrix(wm.embeddings[['texts']]$text)
   wm.cosines <- sim2(wm.embeds)
   wmc <- append(wmc, list(wm.cosines[upper.tri(wm.cosines)]))
@@ -143,7 +143,7 @@ for (i in white_males){
 gc()
 
 for (i in white_females){
-  wf.embeddings <- textEmbed(i$text, keep_token_embeddings = FALSE)
+  wf.embeddings <- textEmbed(i$text, model = "roberta-base", keep_token_embeddings = FALSE)
   wf.embeds <- as.matrix(wf.embeddings[['texts']]$text)
   wf.cosines <- sim2(wf.embeds)
   wfc <- append(wfc, list(wf.cosines[upper.tri(wf.cosines)]))
@@ -186,8 +186,8 @@ cosine_df <- cosine_df %>%
 
 # If you have run the entire code before, you can load the .RData file here
 # If this is the first time running this code, ignore the load() function
-# and the four summary() function that follow. 
-load("main_bert_cosine.RData")
+# and the four summary() functions that follow. 
+load('roberta2.RData')
 
 # Summary output of the four models (M1 ~ M4)
 summary(race.effect)
@@ -279,4 +279,4 @@ pairs(cosine.interactions, simple = "race")
 
 # Save all the models as an .RData file
 # rm(i, simple_prep)
-save.image('main_bert_cosine.RData')
+# save.image('roberta2.RData')

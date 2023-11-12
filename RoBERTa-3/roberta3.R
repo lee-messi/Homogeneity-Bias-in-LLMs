@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 25 Sept 2023
+## Script date: 10 Nov 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -187,7 +187,7 @@ cosine_df <- cosine_df %>%
 # If you have run the entire code before, you can load the .RData file here
 # If this is the first time running this code, ignore the load() function
 # and the four summary() functions that follow. 
-load('s3_layer_roberta_cosine.RData')
+load('roberta3.RData')
 
 # Summary output of the four models (M1 ~ M4)
 summary(race.effect)
@@ -279,4 +279,4 @@ pairs(cosine.interactions, simple = "race")
 
 # Save all the models as an .RData file
 # rm(i, simple_prep)
-save.image('s3_layer_roberta_cosine.RData')
+# save.image('roberta3.RData')

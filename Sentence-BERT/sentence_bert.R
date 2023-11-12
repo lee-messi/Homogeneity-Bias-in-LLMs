@@ -2,7 +2,7 @@
 ## Anonymous
 # The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
 
-## Script date: 25 Sept 2023
+## Script date: 10 Nov 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -48,7 +48,43 @@ allminilm = read_feather("all-MiniLM-L12-v2.feather") %>%
 # If you have run the entire code before, you can load the .RData file here
 # If this is the first time running this code, ignore the load() function
 # and the four summary() functions that follow. 
-load('sentence_bert_models.RData')
+load('sentence_bert.RData')
+
+# Summary output of the four models (M1 ~ M4) using all-mpnet-base-v2
+summary(mpnetbase.race)
+summary(mpnetbase.gender)
+summary(mpnetbase.race.gender)
+summary(mpnetbase.model)
+
+# Log likelihood of the four models (M1 ~ M4) using all-mpnet-base-v2
+logLik(mpnetbase.race)
+logLik(mpnetbase.gender)
+logLik(mpnetbase.race.gender)
+logLik(mpnetbase.model)
+
+# Summary output of the four models (M1 ~ M4) using all_distilroberta_v1 model
+summary(distilroberta.race)
+summary(distilroberta.gender)
+summary(distilroberta.race.gender)
+summary(distilroberta.model)
+
+# Log likelihood of the four models (M1 ~ M4) using all_distilroberta_v1 model
+logLik(distilroberta.race)
+logLik(distilroberta.gender)
+logLik(distilroberta.race.gender)
+logLik(distilroberta.model)
+
+# Summary output of the four models (M1 ~ M4) using all_distilroberta_v1 model
+summary(allminilm.race)
+summary(allminilm.gender)
+summary(allminilm.race.gender)
+summary(allminilm.model)
+
+# Log likelihood of the four models (M1 ~ M4) using all_distilroberta_v1 model
+logLik(allminilm.race)
+logLik(allminilm.gender)
+logLik(allminilm.race.gender)
+logLik(allminilm.model)
 
 # Mixed Effects Model for the all-mpnet-base-v2 model --------------------------
 
@@ -276,4 +312,4 @@ logLik(allminilm.model)
 
 # Save all the models as an .RData file
 # rm(i, simple_prep)
-save.image('sentence_bert_models.RData')
+# save.image('sentence_bert.RData')
