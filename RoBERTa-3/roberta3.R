@@ -1,8 +1,9 @@
 
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 10 Nov 2023
+## Script date: 17 Nov 2023
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -161,11 +162,13 @@ race_list <- rep(c('African Americans', 'Asian Americans',
 
 gender_list <- rep(rep(c("Man", "Woman"), each = group.length), 4)
 
-format_list <- rep(rep(c('story about', 'character description of', 'biography of',
-                         'introduction of', 'social media profile of', 'synopsis for', 
-                         'narrative of', 'self-introduction of', 'tragic story about', 
-                         'funny story about', 'romantic story about', 
-                         'horror story about', 'dramatic story about'), each = format.length), 8)
+formats <- NULL
+
+for (i in black_males){
+  formats <- c(formats, unique(i$format)) 
+}
+
+format_list <- rep(rep(formats, each = format.length), 8)
 
 cosine_list <- c(unlist(bmc, recursive = FALSE), unlist(bfc, recursive = FALSE),
                  unlist(amc, recursive = FALSE), unlist(afc, recursive = FALSE),
@@ -182,101 +185,47 @@ cosine_df <- cosine_df %>%
   mutate(race = relevel(race, ref = "White Americans")) %>%
   mutate(gender = relevel(gender, ref = "Man"))
 
-# Load .RData file -------------------------------------------------------------
-
-# If you have run the entire code before, you can load the .RData file here
-# If this is the first time running this code, ignore the load() function
-# and the four summary() functions that follow. 
-load('roberta3.RData')
-
-# Summary output of the four models (M1 ~ M4)
-summary(race.effect)
-summary(gender.effect)
-summary(race.gender)
-summary(cosine.model)
-
-# Log likelihood of the four models (M1 ~ M4)
-logLik(race.effect)
-logLik(gender.effect)
-logLik(race.gender)
-logLik(cosine.model)
-
-# Build mixed effects model including the main effects -------------------------
-
 # Standardize cosine similarity before fitting mixed-effects models
 cosine_std <- cosine_df %>% 
   mutate(across(where(is.numeric), scale))
 
+# Fit all mixed effects models -------------------------------------------------
+
 # Model examining the main effect of race/ethnicity
-race.effect <- lmer(cosine ~ 1 + race + (1|format), 
-                    data = cosine_std, 
-                    control = lmerControl(optimizer = "nmkbw", 
-                                          calc.derivs = FALSE))
-
-# Report coefficients
-summary(race.effect)
-
-# Report degrees of freedom for t-statistics
-summary(race.effect)$coefficients[2, "df"]
-summary(race.effect)$coefficients[3, "df"]
-summary(race.effect)$coefficients[4, "df"]
+race.model <- lmer(cosine ~ 1 + race + (1|format), 
+                   data = cosine_std, 
+                   control = lmerControl(optimizer = "nmkbw", 
+                                         calc.derivs = FALSE))
 
 # Model examining the main effect of gender
-gender.effect <- lmer(cosine ~ 1 + gender + (1|format), 
-                      data = cosine_std, 
-                      control = lmerControl(optimizer = "nmkbw", 
-                                            calc.derivs = FALSE))
-
-# Report coefficients
-summary(gender.effect)
-
-# Report degrees of freedom for t-statistics
-summary(gender.effect)$coefficients[2, "df"]
-
-# Model examining both race/ethnicity and gender
-race.gender <- lmer(cosine ~ 1 + race + gender + (1|format), 
-                    data = cosine_std, 
-                    control = lmerControl(optimizer = "nmkbw", 
-                                          calc.derivs = FALSE))
-
-summary(race.gender)
-
-# Build mixed effects model including interactions (Supplement) ----------------
-
-cosine.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
+gender.model <- lmer(cosine ~ 1 + gender + (1|format), 
                      data = cosine_std, 
                      control = lmerControl(optimizer = "nmkbw", 
                                            calc.derivs = FALSE))
 
-# Report coefficients
-summary(cosine.model)
+# Model examining both race/ethnicity and gender
+race.gender.model <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                          data = cosine_std, 
+                          control = lmerControl(optimizer = "nmkbw", 
+                                                calc.derivs = FALSE))
 
-# Report degrees of freedom for t-statistics (race/ethnicity)
-summary(cosine.model)$coefficients[2, "df"]
-summary(cosine.model)$coefficients[3, "df"]
-summary(cosine.model)$coefficients[4, "df"]
-# Report degrees of freedom for t-statistics (gender)
-summary(cosine.model)$coefficients[5, "df"]
-# Report degrees of freedom for t-statistics (interaction effect)
-summary(cosine.model)$coefficients[6, "df"]
-summary(cosine.model)$coefficients[7, "df"]
-summary(cosine.model)$coefficients[8, "df"]
+# Model examining all terms including the interaction
+interaction.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
+                          data = cosine_std, 
+                          control = lmerControl(optimizer = "nmkbw", 
+                                                calc.derivs = FALSE))
 
-# Perform likelihood ratio test for all fixed effects
+# Likelihood ratio tests -------------------------------------------------------
+
+# Perform likelihood ratio test for all terms
 mixed(cosine ~ 1 + race * gender + (1|format),
       data = cosine_std, 
       control = lmerControl(optimizer = "nmkbw", 
                             calc.derivs = FALSE),
       method = "LRT")
 
-# Conduct pairwise comparisons -------------------------------------------------
-
-cosine.interactions <- emmeans(cosine.model, ~ race * gender)
-pairs(cosine.interactions, simple = "gender")
-pairs(cosine.interactions, simple = "race")
-
 # Save as .RData ---------------------------------------------------------------
 
 # Save all the models as an .RData file
-# rm(i, simple_prep)
-# save.image('roberta3.RData')
+rm(i, simple_prep)
+save.image('roberta3.RData')
