@@ -3,9 +3,9 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 17 Nov 2023
+## Script date: 18 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("text")){install.packages("text", dependencies = TRUE); require("text")}
@@ -15,7 +15,7 @@ if(!require("lmerTest")){install.packages("lmerTest", dependencies = TRUE); requ
 if(!require("afex")){install.packages("afex", dependencies = TRUE); require("afex")}
 if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); require("emmeans")}
 
-# Initilize the text Package ---------------------------------------------------
+# Initialize the text package --------------------------------------------------
 
 # textrpp_install()
 # textrpp_initialize(save_profile = TRUE)
@@ -29,12 +29,12 @@ simple_prep = function(x) {
   x = str_replace_all(x, "\\s+", " ") # collapse multiple spaces
 }
 
-# Load Stories -----------------------------------------------------------------
+# Load texts -------------------------------------------------------------------
 
 stories <- read.csv('../data/generated_text_final.csv') %>%
   mutate(text = simple_prep(text))
 
-# Separate Stories by Gender, Racial/Ethnic Group, and Text Format -------------
+# Separate text by race/ethnicity, gender, and text format ---------------------
 
 black_males <- stories %>% 
   filter(gender == "man" & race == "African") %>% 
@@ -76,7 +76,7 @@ white_females <- stories %>%
   mutate(gender = "Woman") %>% mutate(race = "White Americans") %>% 
   group_split(format)
 
-# Calculate Cosine Similarity between Sentence Embeddings for each Text Format -
+# Calculate cosine similarity between the sentence embeddings ------------------
 
 bmc <- bfc <- amc <- afc <- hmc <- hfc <- wmc <- wfc <- list()
 

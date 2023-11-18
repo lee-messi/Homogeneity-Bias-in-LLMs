@@ -3,9 +3,9 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 17 Nov 2023
+## Script date: 18 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("arrow")){install.packages("arrow", dependencies = TRUE); require("arrow")}
@@ -14,7 +14,7 @@ if(!require("lmerTest")){install.packages("lmerTest", dependencies = TRUE); requ
 if(!require("afex")){install.packages("afex", dependencies = TRUE); require("afex")}
 if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); require("emmeans")}
 
-# Load Data Frames -------------------------------------------------------------
+# Load data frames -------------------------------------------------------------
 
 # Import data frame generated in the python programming environment
 # Set format, gender, and race as factor variables 
