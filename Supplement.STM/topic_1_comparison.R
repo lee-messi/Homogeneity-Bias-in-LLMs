@@ -1,8 +1,9 @@
 
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 4 Nov 2023
+## Script date: 19 Nov 2023
 
 # Install and/or load packages -------------------------------------------------
 
@@ -30,51 +31,49 @@ simple_prep = function(x) {
   x = str_replace_all(x, "\\s+", " ") # collapse multiple spaces
 }
 
-# Load Stories -----------------------------------------------------------------
+# Load generated text ----------------------------------------------------------
 
-stories <- read.csv('topic_1.csv') %>%
+topic.1 <- read.csv('topic_1.csv') %>%
   mutate(text = simple_prep(text))
 
-stories %>% filter(race == "White") %>% nrow()
+# Separate stories by gender, race/ethnicity, and text format ------------------
 
-# Separate stories by gender, racial/ethnic group, and text format -------------
-
-black_males <- stories %>% 
+black_males <- topic.1 %>% 
   filter(gender == "man" & race == "African") %>% 
   mutate(gender = "Man") %>% mutate(race = "African Americans") %>% 
   group_split(format)
 
-black_females <- stories %>% 
+black_females <- topic.1 %>% 
   filter(gender == "woman" & race == "African") %>% 
   mutate(gender = "Woman") %>% mutate(race = "African Americans") %>% 
   group_split(format)
 
-asian_males <- stories %>% 
+asian_males <- topic.1 %>% 
   filter(gender == "man" & race == "Asian") %>% 
   mutate(gender = "Man") %>% mutate(race = "Asian Americans") %>% 
   group_split(format)
 
-asian_females <- stories %>% 
+asian_females <- topic.1 %>% 
   filter(gender == "woman" & race == "Asian") %>% 
   mutate(gender = "Woman") %>% mutate(race = "Asian Americans") %>% 
   group_split(format)
 
-hispanic_males <- stories %>% 
+hispanic_males <- topic.1 %>% 
   filter(gender == "man" & race == "Hispanic") %>% 
   mutate(gender = "Man") %>% mutate(race = "Hispanic Americans") %>% 
   group_split(format)
 
-hispanic_females <- stories %>% 
+hispanic_females <- topic.1 %>% 
   filter(gender == "woman" & race == "Hispanic") %>% 
   mutate(gender = "Woman") %>% mutate(race = "Hispanic Americans") %>% 
   group_split(format)
 
-white_males <- stories %>% 
+white_males <- topic.1 %>% 
   filter(gender == "man" & race == "White") %>% 
   mutate(gender = "Man") %>% mutate(race = "White Americans") %>% 
   group_split(format)
 
-white_females <- stories %>% 
+white_females <- topic.1 %>% 
   filter(gender == "woman" & race == "White") %>% 
   mutate(gender = "Woman") %>% mutate(race = "White Americans") %>% 
   group_split(format)
@@ -215,4 +214,5 @@ ggplot(cosine_std, aes(x = race, y = cosine, color = race)) +
                               "Asian Americans" = "Asian\nAmericans", 
                               "Hispanic Americans" = "Hispanic\nAmericans"))
 
-ggsave("topic_1_race.pdf", width = 6, height = 3, dpi = "retina")
+ggsave("Figures/topic_1_race.pdf", width = 6, height = 3, dpi = "retina")
+

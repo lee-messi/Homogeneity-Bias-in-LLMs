@@ -1,21 +1,22 @@
 
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 8 Nov 2023
+## Script date: 19 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("stm")){install.packages("stm", dependencies = TRUE); require("stm")}
 if(!require("reshape2")){install.packages("reshape2", dependencies = TRUE); require("reshape2")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 
-# Load Generated Text ----------------------------------------------------------
+# Load generated text ----------------------------------------------------------
 
 data <- read.csv('../Data/generated_text_final.csv')
 
-# Prepare text for STM ---------------------------------------------------------
+# Prepare text for the STM -----------------------------------------------------
 
 processed <- textProcessor(data$text, 
                            metadata = data, 
@@ -53,13 +54,13 @@ fit <- stm(documents = out$documents,
            init.type = "Spectral", 
            seed = 1048596)
 
-# Save as RData file ------------------------------------------------------------
+# Save as .RData file ----------------------------------------------------------
 
 # save.image('stm.RData')
 load('stm.RData')
 labelTopics(fit)
 
-pdf(file = "frex_words.pdf", width = 10, height = 6) 
+pdf(file = "Figures/frex_words.pdf", width = 10, height = 6) 
 plot.STM(fit, n = 5)
 dev.off()
 
@@ -82,7 +83,7 @@ theta.long.plot.df <- theta.with.race.long %>%
                        "Hispanic" = "Hispanic\nAmericans",
                        "White" = "White\nAmericans"))
 
-# Visualize the Theta Values by Racial/Ethnic Group ----------------------------
+# Visualize the theta values by race/ethnicity ---------------------------------
 
 ggplot(theta.long.plot.df, aes(x = topic, y = theta, fill = topic)) +
   geom_violin() +
@@ -95,7 +96,7 @@ ggplot(theta.long.plot.df, aes(x = topic, y = theta, fill = topic)) +
         plot.title = element_text(hjust = 0.5),
         legend.position="none")
 
-ggsave("stm_violin_plot.png", width = 6, height = 6, dpi = "retina")
+# ggsave("Figures/stm_violin_plot.pdf", width = 6, height = 6, dpi = "retina")
 
 # Identify topic of the text and make it a new column --------------------------
 
@@ -122,13 +123,14 @@ n = 5  # Replace 5 with the number of top topics you want
 
 top_topics <- topic_frequencies %>%
   group_by(race) %>%
-  slice_max(order_by = probability, n = n)
+  arrange(desc(probability)) %>%
+  slice_head(n = n)
 
 top_topics %>%
   group_by(race) %>%
   summarise(sum_probability = sum(probability))
 
-# Visualize the Theta Values by Racial/Ethnic Group ----------------------------
+# Visualize the theta values by race/ethnicity ---------------------------------
 
 data.with.topic <- data.with.topic %>% 
   mutate(race = case_when(race == "African" ~ "African Americans", 
@@ -155,7 +157,7 @@ ggplot(data.with.topic, aes(x = topic, fill = race)) +
         legend.text = element_text(size = 15)) + 
   scale_fill_aaas()
 
-ggsave("stm_topic_distributions.pdf", width = 10, height = 6, dpi = "retina")
+ggsave("Figures/stm_topic_distributions.pdf", width = 10, height = 6, dpi = "retina")
 
 # Perform F tests to compare variances -----------------------------------------
 

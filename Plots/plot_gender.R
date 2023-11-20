@@ -1,19 +1,21 @@
+
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 15 Sept 2023
+## Script date: 19 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 if(!require("ggpubr")){install.packages("ggpubr", dependencies = TRUE); require("ggpubr")}
 
-# Load All Models --------------------------------------------------------------
+# Load all data frames ---------------------------------------------------------
 
 load('all_models.RData')
 
-# Define Function to Generate Gender Plots -------------------------------------
+# Define function to generate gender plots -------------------------------------
 
 gender_plot <- function(model){
   
@@ -33,26 +35,8 @@ gender_plot <- function(model){
   return(plot)
 }
 
-# Generate Plot for BERT-2 -----------------------------------------------------
+# Generate plot for BERT-2 -----------------------------------------------------
 
-gender_plot(main_cosine_std)
-# ggsave("cosine_gender_main.jpg", width = 8, height = 3, dpi = "retina")
-ggsave("cosine_gender_main.pdf", width = 6, height = 3, dpi = "retina")
+gender_plot(bert2)
+ggsave("Figures/bert2_gender.pdf", width = 6, height = 3, dpi = "retina")
 
-# Alternative Plots ------------------------------------------------------------
-
-ggplot(all_models, aes(x = model, y = cosine, color = gender)) + 
-  geom_point(stat = "summary", fun = "mean", size = 2,
-             position = position_dodge(1)) + 
-  facet_grid(.~model, scales = "free_x") + 
-  theme_bw() + 
-  theme(legend.position = "top",
-        axis.text.x = element_blank(),
-        axis.title.x = element_blank()) + 
-  labs(x = "Model Specification", 
-       y = "Standardized Cosine Similarity", 
-       color = "Gender Group") + 
-  coord_cartesian(ylim = c(-0.40, 0.30)) +
-  scale_color_aaas()
-
-ggsave("cosine_gender_seven.jpg", width = 9, height = 4, dpi = "retina")

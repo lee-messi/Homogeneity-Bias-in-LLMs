@@ -1,40 +1,38 @@
+
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 9 Sept 2023
+## Script date: 19 Nov 2023
 
-# Install and/or Load Packages -------------------------------------------------
+# Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 
-# Load All Models --------------------------------------------------------------
+# Load all data frames ---------------------------------------------------------
 
-# Note that all models are saved as 'cosine_std' in all .RData files
-# We rename them to clarify which model the data set is from
+# Note that all models are saved as 'cosine_std' in the BERT and RoBERTa models
+# We rename them to clarify which model the data frame is from
 
-setwd('../Main')
-load('main_bert_cosine.RData')
-main_cosine_std <- cosine_std
+load('../BERT-2/bert2.RData')
+bert2 <- cosine_std
 
-setwd('../S1.Layer')
-load('s1_layer_cosine.RData')
-s1_layer_cosine_std <- cosine_std
+load('../BERT-3/bert3.RData')
+bert3 <- cosine_std
 
-setwd('../S2.RoBERTa')
-load('s2_roberta_cosine.RData')
-s2_roberta_cosine_std <- cosine_std
+load('../RoBERTa-2/roberta2.RData')
+roberta2 <- cosine_std
 
-setwd('../S3.Layer.RoBERTa')
-load('s3_layer_roberta_cosine.RData')
-s3_roberta_layer_cosine_std <- cosine_std
+load('../RoBERTa-3/roberta3.RData')
+roberta3 <- cosine_std
 
-setwd('../S4.Sentence-BERT')
-load('sentence_bert_models.RData')
-s4_mpnetbase_cosine_std <- mpnetbase
-s4_distilroberta_cosine_std <- distilroberta
-s4_allminilm_cosine_std <- allminilm
+load('../Sentence-BERT/sentence_bert.RData')
 
-# Mutate Gender Column ---------------------------------------------------------
+# Remove all objects other than the data frames
+rm(list = setdiff(ls(), c("bert2", "bert3", "roberta2", "roberta3", 
+                          "mpnetbase", "distilroberta", "minilm")))
+
+# Mutate gender column ---------------------------------------------------------
 
 mutate_gender <- function(x){
   x <- x %>% 
@@ -43,16 +41,15 @@ mutate_gender <- function(x){
   return(x)
 }
 
-main_cosine_std <- mutate_gender(main_cosine_std)
-s1_layer_cosine_std <- mutate_gender(s1_layer_cosine_std)
-s2_roberta_cosine_std <- mutate_gender(s2_roberta_cosine_std)
-s3_roberta_layer_cosine_std <- mutate_gender(s3_roberta_layer_cosine_std)
-s4_mpnetbase_cosine_std <- mutate_gender(s4_mpnetbase_cosine_std)
-s4_distilroberta_cosine_std <- mutate_gender(s4_distilroberta_cosine_std)
-s4_allminilm_cosine_std <- mutate_gender(s4_allminilm_cosine_std)
+bert2 <- mutate_gender(bert2)
+bert3 <- mutate_gender(bert3)
+roberta2 <- mutate_gender(roberta2)
+roberta3 <- mutate_gender(roberta3)
+mpnetbase <- mutate_gender(mpnetbase)
+distilroberta <- mutate_gender(distilroberta)
+minilm <- mutate_gender(minilm)
 
-unique(s4_allminilm_cosine_std$gender)
-unique(main_cosine_std$gender)
+# Save all models as an .RData file --------------------------------------------
 
-setwd('../Plots')
 save.image('all_models.RData')
+
