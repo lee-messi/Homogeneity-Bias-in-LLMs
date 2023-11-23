@@ -33,40 +33,40 @@ simple_prep = function(x) {
 
 # Load generated text ----------------------------------------------------------
 
-topic.1 <- read.csv('topic_1.csv') %>%
+topic.10 <- read.csv('topic_10.csv') %>%
   mutate(text = simple_prep(text))
 
 # Separate stories by gender, race/ethnicity, and text format ------------------
 
-black_males <- topic.1 %>% 
+black_males <- topic.10 %>% 
   filter(gender == "Men" & race == "African Americans") %>% 
   group_split(format)
 
-black_females <- topic.1 %>% 
+black_females <- topic.10 %>% 
   filter(gender == "Women" & race == "African Americans") %>% 
   group_split(format)
 
-asian_males <- topic.1 %>% 
+asian_males <- topic.10 %>% 
   filter(gender == "Men" & race == "Asian Americans") %>% 
   group_split(format)
 
-asian_females <- topic.1 %>% 
+asian_females <- topic.10 %>% 
   filter(gender == "Women" & race == "Asian Americans") %>% 
   group_split(format)
 
-hispanic_males <- topic.1 %>% 
+hispanic_males <- topic.10 %>% 
   filter(gender == "Men" & race == "Hispanic Americans") %>% 
   group_split(format)
 
-hispanic_females <- topic.1 %>% 
+hispanic_females <- topic.10 %>% 
   filter(gender == "Women" & race == "Hispanic Americans") %>% 
   group_split(format)
 
-white_males <- topic.1 %>% 
+white_males <- topic.10 %>% 
   filter(gender == "Men" & race == "White Americans") %>% 
   group_split(format)
 
-white_females <- topic.1 %>% 
+white_females <- topic.10 %>% 
   filter(gender == "Women" & race == "White Americans") %>% 
   group_split(format)
 
@@ -188,8 +188,8 @@ c(hw.t$parameter, hw.t$statistic)
 
 # Save as .RData ---------------------------------------------------------------
 
-# save.image("topic_1_cosines.RData")
-load("topic_1_cosines.RData")
+# save.image("topic_10_cosines.RData")
+load("topic_10_cosines.RData")
 
 # Plot the effect of race/ethnicity --------------------------------------------
 
@@ -212,5 +212,5 @@ ggplot(cosine_std, aes(x = race, y = cosine, color = race)) +
                               "Asian Americans" = "Asian\nAmericans", 
                               "Hispanic Americans" = "Hispanic\nAmericans"))
 
-ggsave("Figures/topic_1_race.pdf", width = 6, height = 3, dpi = "retina")
+ggsave("Figures/topic_10_race.pdf", width = 6, height = 3, dpi = "retina")
 

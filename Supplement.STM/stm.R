@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 19 Nov 2023
+## Script date: 23 Nov 2023
 
 # Install and/or load packages -------------------------------------------------
 
@@ -138,7 +138,11 @@ data.with.topic <- data.with.topic %>%
                           race == "Hispanic" ~ "Hispanic Americans", 
                           race == "White" ~ "White Americans")) %>%
   mutate(race = as.factor(race)) %>%
-  mutate(race = relevel(race, ref = "White Americans"))
+  mutate(race = relevel(race, ref = "White Americans")) %>% 
+  mutate(gender = case_when(gender == "man" ~ "Men",
+                            gender == "woman" ~ "Women")) %>% 
+  mutate(gender = as.factor(gender)) %>%
+  mutate(gender = relevel(gender, ref = "Men"))
  
 ggplot(data.with.topic, aes(x = topic, fill = race)) +
   geom_density(alpha = 0.6) + 
@@ -175,3 +179,7 @@ var.test(hispanic.topics, white.topics, alternative = "greater")
 topic.1 <- data.with.topic %>% filter(topic == 1)
 topic.1 %>% group_by(race) %>% summarize(n = n())
 write.csv(topic.1, "topic_1.csv", row.names = FALSE)
+
+topic.10 <- data.with.topic %>% filter(topic == 10)
+topic.10 %>% group_by(race) %>% summarize(n = n())
+write.csv(topic.10, "topic_10.csv", row.names = FALSE)
