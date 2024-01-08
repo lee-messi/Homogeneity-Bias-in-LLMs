@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 17 Nov 2023
+## Script date: 8 Jan 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -24,22 +24,22 @@ load('sentence_bert.RData')
 # Race model output (all-mpnet-base-v2 model) ----------------------------------
 
 # Summary output and log likelihood of the race model
-summary(mpnetbase.race.model)
-logLik(mpnetbase.race.model)
+summary(mpnetbase.race)
+logLik(mpnetbase.race)
 
 # Report degrees of freedom for t-statistics
-summary(mpnetbase.race.model)$coefficients[2, "df"]
-summary(mpnetbase.race.model)$coefficients[3, "df"]
-summary(mpnetbase.race.model)$coefficients[4, "df"]
+summary(mpnetbase.race)$coefficients[2, "df"]
+summary(mpnetbase.race)$coefficients[3, "df"]
+summary(mpnetbase.race)$coefficients[4, "df"]
 
 # Gender model output (all-mpnet-base-v2 model) --------------------------------
 
 # Summary output and log likelihood of the gender model
-summary(mpnetbase.gender.model)
-logLik(mpnetbase.gender.model)
+summary(mpnetbase.gender)
+logLik(mpnetbase.gender)
 
 # Report degrees of freedom for t-statistics
-summary(mpnetbase.gender.model)$coefficients[2, "df"]
+summary(mpnetbase.gender)$coefficients[2, "df"]
 
 # Race and gender model output (all-mpnet-base-v2 model) -----------------------
 
@@ -48,28 +48,28 @@ summary(mpnetbase.race.gender)
 logLik(mpnetbase.race.gender)
 
 # Report degrees of freedom for t-statistics
-summary(mpnetbase.gender.model)$coefficients[2, "df"]
+summary(mpnetbase.gender)$coefficients[2, "df"]
 
 # Interaction model output (all-mpnet-base-v2 model) ---------------------------
 
 # Report coefficients
-summary(mpnetbase.interaction.model)
-logLik(mpnetbase.interaction.model)
+summary(mpnetbase.interaction)
+logLik(mpnetbase.interaction)
 
 # Report degrees of freedom for t-statistics (race/ethnicity)
-summary(mpnetbase.interaction.model)$coefficients[2, "df"]
-summary(mpnetbase.interaction.model)$coefficients[3, "df"]
-summary(mpnetbase.interaction.model)$coefficients[4, "df"]
+summary(mpnetbase.interaction)$coefficients[2, "df"]
+summary(mpnetbase.interaction)$coefficients[3, "df"]
+summary(mpnetbase.interaction)$coefficients[4, "df"]
 # Report degrees of freedom for t-statistics (gender)
-summary(mpnetbase.interaction.model)$coefficients[5, "df"]
+summary(mpnetbase.interaction)$coefficients[5, "df"]
 # Report degrees of freedom for t-statistics (interaction effect)
-summary(mpnetbase.interaction.model)$coefficients[6, "df"]
-summary(mpnetbase.interaction.model)$coefficients[7, "df"]
-summary(mpnetbase.interaction.model)$coefficients[8, "df"]
+summary(mpnetbase.interaction)$coefficients[6, "df"]
+summary(mpnetbase.interaction)$coefficients[7, "df"]
+summary(mpnetbase.interaction)$coefficients[8, "df"]
 
 # Pairwise comparisons (all-mpnet-base-v2 model) -------------------------------
 
-mpnetbase.interactions <- emmeans(mpnetbase.interaction.model, ~ race * gender)
+mpnetbase.interactions <- emmeans(mpnetbase.interaction, ~ race * gender)
 
 pairs(mpnetbase.interactions, simple = "gender")
 pairs(mpnetbase.interactions, simple = "race")
@@ -77,22 +77,22 @@ pairs(mpnetbase.interactions, simple = "race")
 # Race model output (all_distilroberta_v1model) ----------------------------------
 
 # Summary output and log likelihood of the race model
-summary(distilroberta.race.model)
-logLik(distilroberta.race.model)
+summary(distilroberta.race)
+logLik(distilroberta.race)
 
 # Report degrees of freedom for t-statistics
-summary(distilroberta.race.model)$coefficients[2, "df"]
-summary(distilroberta.race.model)$coefficients[3, "df"]
-summary(distilroberta.race.model)$coefficients[4, "df"]
+summary(distilroberta.race)$coefficients[2, "df"]
+summary(distilroberta.race)$coefficients[3, "df"]
+summary(distilroberta.race)$coefficients[4, "df"]
 
 # Gender model output (all_distilroberta_v1model) --------------------------------
 
 # Summary output and log likelihood of the gender model
-summary(distilroberta.gender.model)
-logLik(distilroberta.gender.model)
+summary(distilroberta.gender)
+logLik(distilroberta.gender)
 
 # Report degrees of freedom for t-statistics
-summary(distilroberta.gender.model)$coefficients[2, "df"]
+summary(distilroberta.gender)$coefficients[2, "df"]
 
 # Race and gender model output (all_distilroberta_v1model) -----------------------
 
@@ -101,28 +101,28 @@ summary(distilroberta.race.gender)
 logLik(distilroberta.race.gender)
 
 # Report degrees of freedom for t-statistics
-summary(distilroberta.gender.model)$coefficients[2, "df"]
+summary(distilroberta.gender)$coefficients[2, "df"]
 
 # Interaction model output (all_distilroberta_v1model) ---------------------------
 
 # Report coefficients
-summary(distilroberta.interaction.model)
-logLik(distilroberta.interaction.model)
+summary(distilroberta.interaction)
+logLik(distilroberta.interaction)
 
 # Report degrees of freedom for t-statistics (race/ethnicity)
-summary(distilroberta.interaction.model)$coefficients[2, "df"]
-summary(distilroberta.interaction.model)$coefficients[3, "df"]
-summary(distilroberta.interaction.model)$coefficients[4, "df"]
+summary(distilroberta.interaction)$coefficients[2, "df"]
+summary(distilroberta.interaction)$coefficients[3, "df"]
+summary(distilroberta.interaction)$coefficients[4, "df"]
 # Report degrees of freedom for t-statistics (gender)
-summary(distilroberta.interaction.model)$coefficients[5, "df"]
+summary(distilroberta.interaction)$coefficients[5, "df"]
 # Report degrees of freedom for t-statistics (interaction effect)
-summary(distilroberta.interaction.model)$coefficients[6, "df"]
-summary(distilroberta.interaction.model)$coefficients[7, "df"]
-summary(distilroberta.interaction.model)$coefficients[8, "df"]
+summary(distilroberta.interaction)$coefficients[6, "df"]
+summary(distilroberta.interaction)$coefficients[7, "df"]
+summary(distilroberta.interaction)$coefficients[8, "df"]
 
 # Pairwise comparisons (all_distilroberta_v1model) -------------------------------
 
-distilroberta.interactions <- emmeans(distilroberta.interaction.model, ~ race * gender)
+distilroberta.interactions <- emmeans(distilroberta.interaction, ~ race * gender)
 
 pairs(distilroberta.interactions, simple = "gender")
 pairs(distilroberta.interactions, simple = "race")
@@ -130,22 +130,22 @@ pairs(distilroberta.interactions, simple = "race")
 # Race model output (all-MiniLM-L12-v2 model) ----------------------------------
 
 # Summary output and log likelihood of the race model
-summary(mpnetbase.race.model)
-logLik(mpnetbase.race.model)
+summary(minilm.race)
+logLik(minilm.race)
 
 # Report degrees of freedom for t-statistics
-summary(mpnetbase.race.model)$coefficients[2, "df"]
-summary(mpnetbase.race.model)$coefficients[3, "df"]
-summary(mpnetbase.race.model)$coefficients[4, "df"]
+summary(minilm.race)$coefficients[2, "df"]
+summary(minilm.race)$coefficients[3, "df"]
+summary(minilm.race)$coefficients[4, "df"]
 
 # Gender model output (all-MiniLM-L12-v2 model) --------------------------------
 
 # Summary output and log likelihood of the gender model
-summary(minilm.gender.model)
-logLik(minilm.gender.model)
+summary(minilm.gender)
+logLik(minilm.gender)
 
 # Report degrees of freedom for t-statistics
-summary(minilm.gender.model)$coefficients[2, "df"]
+summary(minilm.gender)$coefficients[2, "df"]
 
 # Race and gender model output (all-MiniLM-L12-v2 model) -----------------------
 
@@ -154,28 +154,28 @@ summary(minilm.race.gender)
 logLik(minilm.race.gender)
 
 # Report degrees of freedom for t-statistics
-summary(minilm.gender.model)$coefficients[2, "df"]
+summary(minilm.gender)$coefficients[2, "df"]
 
 # Interaction model output (all-MiniLM-L12-v2 model) ---------------------------
 
 # Report coefficients
-summary(minilm.interaction.model)
-logLik(minilm.interaction.model)
+summary(minilm.interaction)
+logLik(minilm.interaction)
 
 # Report degrees of freedom for t-statistics (race/ethnicity)
-summary(minilm.interaction.model)$coefficients[2, "df"]
-summary(minilm.interaction.model)$coefficients[3, "df"]
-summary(minilm.interaction.model)$coefficients[4, "df"]
+summary(minilm.interaction)$coefficients[2, "df"]
+summary(minilm.interaction)$coefficients[3, "df"]
+summary(minilm.interaction)$coefficients[4, "df"]
 # Report degrees of freedom for t-statistics (gender)
-summary(minilm.interaction.model)$coefficients[5, "df"]
+summary(minilm.interaction)$coefficients[5, "df"]
 # Report degrees of freedom for t-statistics (interaction effect)
-summary(minilm.interaction.model)$coefficients[6, "df"]
-summary(minilm.interaction.model)$coefficients[7, "df"]
-summary(minilm.interaction.model)$coefficients[8, "df"]
+summary(minilm.interaction)$coefficients[6, "df"]
+summary(minilm.interaction)$coefficients[7, "df"]
+summary(minilm.interaction)$coefficients[8, "df"]
 
 # Pairwise comparisons (all-MiniLM-L12-v2 model) -------------------------------
 
-minilm.interactions <- emmeans(minilm.interaction.model, ~ race * gender)
+minilm.interactions <- emmeans(minilm.interaction, ~ race * gender)
 
 pairs(minilm.interactions, simple = "gender")
 pairs(minilm.interactions, simple = "race")
