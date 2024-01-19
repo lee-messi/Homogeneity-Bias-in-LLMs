@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 23 Nov 2023
+## Script date: 18 Jan 2024
 
 # Install and/or load packages -------------------------------------------------
 
@@ -202,7 +202,8 @@ ggplot(cosine_std, aes(x = race, y = cosine, color = race)) +
   theme_bw() + 
   theme(legend.position = "none",
         axis.title.x = element_blank(), 
-        strip.text.x = element_blank()) + 
+        strip.text.x = element_blank(), 
+        axis.title.y = element_text(size = 10)) + 
   labs(x = "Racial/Ethnic Groups", 
        y = "Standardized Cosine Similarity", 
        color = "Racial/Ethnic Groups") + 
