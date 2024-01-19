@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 19 Nov 2023
+## Script date: 18 Jan 2024
 
 # Install and/or load packages -------------------------------------------------
 
@@ -25,7 +25,9 @@ gender_plot <- function(model){
                position = position_dodge(0.5)) + 
     theme_bw() + 
     theme(legend.position = "none",
-          strip.text.x = element_blank()) + 
+          strip.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_text(size = 10)) + 
     labs(x = "Gender Groups", 
          y = "Standardized Cosine Similarity", 
          color = "Gender Groups") + 
@@ -38,5 +40,5 @@ gender_plot <- function(model){
 # Generate plot for BERT-2 -----------------------------------------------------
 
 gender_plot(bert2)
-ggsave("Figures/bert2_gender.pdf", width = 6, height = 3, dpi = "retina")
+ggsave("Figures/bert2_gender.pdf", width = 6, height = 2.5, dpi = "retina")
 

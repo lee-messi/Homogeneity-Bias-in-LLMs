@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 19 Nov 2023
+## Script date: 18 Jan 2024
 
 # Install and/or load packages -------------------------------------------------
 
@@ -50,8 +50,15 @@ ggplot(bert2, aes(x = race, y = cosine, color = gender)) +
   geom_point(size = 2, stat = "summary", fun = "mean", 
              position = position_dodge(0.75)) + 
   theme_bw() + 
-  theme(legend.position = "top",
-        axis.title.x = element_blank()) + 
+  guides(fill = guide_legend(nrow = 1, byrow = TRUE)) +
+  theme(legend.position = c(0.5, 0.9), 
+        legend.direction = "horizontal",
+        legend.key.height = unit(0.4, "cm"),  # Adjust key height
+        legend.spacing.y = unit(0.2, "cm"),   # Adjust vertical spacing
+        legend.box.background = element_rect(fill = "white", color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 10),
+        legend.title = element_text(size = 9)) + 
   labs(x = "Racial/Ethnic Groups", 
        y = "Standardized Cosine Similarity", 
        color = "Gender Groups") + 
@@ -59,19 +66,24 @@ ggplot(bert2, aes(x = race, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-ggsave("Figures/bert2_interaction.pdf", width = 6, height = 3, dpi = "retina")
+ggsave("Figures/bert2_interaction.pdf", width = 6, height = 2.5, dpi = "retina")
 
 # Interaction plot for all model specifications --------------------------------
 
 ggplot(all_models, aes(x = model, y = cosine, color = gender)) + 
   geom_hline(yintercept = 0.0, linetype = "dashed") + 
   geom_point(stat = "summary", fun = "mean", 
-             position = position_dodge(0.75)) + 
+             position = position_dodge(0.5)) + 
   facet_grid(race~model, scales = "free_x") + 
   theme_bw() + 
   theme(legend.position = "top",
+        legend.title = element_text(size = 11), 
+        legend.text = element_text(size = 11),
+        legend.box.spacing = unit(0, "pt"),
         axis.text.x = element_blank(),
-        axis.title.x = element_blank()) + 
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 13), 
+        plot.margin = margin(t = 0)) + 
   labs(x = "Model Specification", 
        y = "Standardized Cosine Similarity", 
        color = "Gender Groups") + 
