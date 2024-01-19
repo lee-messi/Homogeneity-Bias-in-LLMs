@@ -201,16 +201,13 @@ ggplot(cosine_std, aes(x = race, y = cosine, color = race)) +
                position = position_dodge(0.5)) +
   theme_bw() + 
   theme(legend.position = "none",
+        axis.title.x = element_blank(), 
         strip.text.x = element_blank()) + 
   labs(x = "Racial/Ethnic Groups", 
        y = "Standardized Cosine Similarity", 
        color = "Racial/Ethnic Groups") + 
   coord_cartesian(ylim = c(-0.50, 0.30)) +
-  scale_color_aaas() + 
-  scale_x_discrete(labels = c("White Americans" = "White\nAmericans", 
-                              "African Americans" = "African\nAmericans", 
-                              "Asian Americans" = "Asian\nAmericans", 
-                              "Hispanic Americans" = "Hispanic\nAmericans"))
+  scale_color_aaas()
 
-ggsave("Figures/topic_10_race.pdf", width = 6, height = 3, dpi = "retina")
+ggsave("Figures/topic_10_race.pdf", width = 6, height = 2.5, dpi = "retina")
 
