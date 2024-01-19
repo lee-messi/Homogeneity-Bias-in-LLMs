@@ -1,8 +1,9 @@
 
 ## Anonymous
-# The Effect of Group Status on the Variability of Group Representations in LLM-generated Text
+# Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
+# Consistent with a Bias Observed in Humans
 
-## Script date: 7 Sept 2023
+## Script date: 18 Jan 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -188,89 +189,92 @@ cosine_df <- cosine_df %>%
   mutate(race = relevel(race, ref = "White Americans")) %>%
   mutate(gender = relevel(gender, ref = "Man"))
 
-# Load .RData file -------------------------------------------------------------
-
-# load("s5_preprocessing_cosine.RData")
-
-# Build mixed effects model including the main effects -------------------------
-
+# Standardize cosine similarity before fitting mixed-effects models
 cosine_std <- cosine_df %>% 
   mutate(across(where(is.numeric), scale))
 
+# Load .RData file -------------------------------------------------------------
+
+load("preprocessing.RData")
+
+# Fit all mixed effects models -------------------------------------------------
+
 # Model examining the main effect of race/ethnicity
-race.effect <- lmer(cosine ~ 1 + race + (1|format), 
-                    data = cosine_std, 
-                    control = lmerControl(optimizer = "nmkbw", 
-                                          calc.derivs = FALSE))
-
-# Report coefficients
-summary(race.effect)
-
-# Report degrees of freedom for t-statistics
-summary(race.effect)$coefficients[2, "df"]
-summary(race.effect)$coefficients[3, "df"]
-summary(race.effect)$coefficients[4, "df"]
-
-# Perform Likelihood ratio test for the main effect of race/ethnicity
-mixed(cosine ~ 1 + race + (1|format),
-      data = cosine_std, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
+race.model <- lmer(cosine ~ 1 + race + (1|format), 
+                   data = cosine_std, 
+                   control = lmerControl(optimizer = "nmkbw", 
+                                         calc.derivs = FALSE))
 
 # Model examining the main effect of gender
-gender.effect <- lmer(cosine ~ 1 + gender + (1|format), 
-                      data = cosine_std, 
-                      control = lmerControl(optimizer = "nmkbw", 
-                                            calc.derivs = FALSE))
-
-# Report coefficients
-summary(gender.effect)
-
-# Report degrees of freedom for t-statistics
-summary(gender.effect)$coefficients[2, "df"]
-
-# Perform Likelihood ratio test for the main effect of gender
-mixed(cosine ~ 1 + gender + (1|format),
-      data = cosine_std, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
-
-# Build mixed effects model including interactions (Supplement) ----------------
-
-cosine.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
+gender.model <- lmer(cosine ~ 1 + gender + (1|format), 
                      data = cosine_std, 
                      control = lmerControl(optimizer = "nmkbw", 
                                            calc.derivs = FALSE))
 
+# Model examining both race/ethnicity and gender
+race.gender.model <- lmer(cosine ~ 1 + race + gender + (1|format), 
+                          data = cosine_std, 
+                          control = lmerControl(optimizer = "nmkbw", 
+                                                calc.derivs = FALSE))
+
+# Model examining all terms including the interaction
+interaction.model <- lmer(cosine ~ 1 + race * gender + (1|format), 
+                          data = cosine_std, 
+                          control = lmerControl(optimizer = "nmkbw", 
+                                                calc.derivs = FALSE))
+
+# Race model output ------------------------------------------------------------
+
+# Summary output and log likelihood of the race model
+summary(race.model)
+logLik(race.model)
+
+# Report degrees of freedom for t-statistics
+summary(race.model)$coefficients[2, "df"]
+summary(race.model)$coefficients[3, "df"]
+summary(race.model)$coefficients[4, "df"]
+
+# Gender model output ----------------------------------------------------------
+
+# Summary output and log likelihood of the gender model
+summary(gender.model)
+logLik(gender.model)
+
+# Report degrees of freedom for t-statistics
+summary(gender.model)$coefficients[2, "df"]
+
+# Race and gender model output -------------------------------------------------
+
+# Summary output and log likelihood of the race and gender model
+summary(race.gender)
+logLik(race.gender)
+
+# Report degrees of freedom for t-statistics
+summary(gender.model)$coefficients[2, "df"]
+
+# Interaction model output -----------------------------------------------------
+
 # Report coefficients
-summary(cosine.model)
+summary(interaction.model)
+logLik(interaction.model)
 
 # Report degrees of freedom for t-statistics (race/ethnicity)
-summary(cosine.model)$coefficients[2, "df"]
-summary(cosine.model)$coefficients[3, "df"]
-summary(cosine.model)$coefficients[4, "df"]
+summary(interaction.model)$coefficients[2, "df"]
+summary(interaction.model)$coefficients[3, "df"]
+summary(interaction.model)$coefficients[4, "df"]
 # Report degrees of freedom for t-statistics (gender)
-summary(cosine.model)$coefficients[5, "df"]
+summary(interaction.model)$coefficients[5, "df"]
 # Report degrees of freedom for t-statistics (interaction effect)
-summary(cosine.model)$coefficients[6, "df"]
-summary(cosine.model)$coefficients[7, "df"]
-summary(cosine.model)$coefficients[8, "df"]
+summary(interaction.model)$coefficients[6, "df"]
+summary(interaction.model)$coefficients[7, "df"]
+summary(interaction.model)$coefficients[8, "df"]
 
-# Perform likelihood ratio test for all fixed effects
-mixed(cosine ~ 1 + race * gender + (1|format),
-      data = cosine_std, 
-      control = lmerControl(optimizer = "nmkbw", 
-                            calc.derivs = FALSE),
-      method = "LRT")
+# Pairwise comparisons ---------------------------------------------------------
 
-# Conduct pairwise comparisons -------------------------------------------------
-
-cosine.interactions <- emmeans(cosine.model, ~ race * gender)
-pairs(cosine.interactions, simple = "gender")
+cosine.interactions <- emmeans(interaction.model, ~ race * gender)
+pairs(cosine.interactions, simple = "gender", reverse = TRUE)
 
 # Save as .RData ---------------------------------------------------------------
 
 rm(i, extra_prep)
-save.image("s5_preprocessing_cosine.RData")
+save.image("preprocessing.RData")

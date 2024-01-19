@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 17 Nov 2023
+## Script date: 18 Jan 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -70,7 +70,5 @@ summary(interaction.model)$coefficients[8, "df"]
 
 # Pairwise comparisons ---------------------------------------------------------
 
-cosine.interactions <- emmeans(cosine.model, ~ race * gender)
-
-pairs(cosine.interactions, simple = "gender")
-pairs(cosine.interactions, simple = "race")
+cosine.interactions <- emmeans(interaction.model, ~ race * gender)
+pairs(cosine.interactions, simple = "gender", reverse = TRUE)

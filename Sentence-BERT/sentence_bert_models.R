@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 8 Jan 2024
+## Script date: 18 Jan 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -70,9 +70,7 @@ summary(mpnetbase.interaction)$coefficients[8, "df"]
 # Pairwise comparisons (all-mpnet-base-v2 model) -------------------------------
 
 mpnetbase.interactions <- emmeans(mpnetbase.interaction, ~ race * gender)
-
-pairs(mpnetbase.interactions, simple = "gender")
-pairs(mpnetbase.interactions, simple = "race")
+pairs(mpnetbase.interactions, simple = "gender", reverse = TRUE)
 
 # Race model output (all_distilroberta_v1model) ----------------------------------
 
@@ -123,9 +121,7 @@ summary(distilroberta.interaction)$coefficients[8, "df"]
 # Pairwise comparisons (all_distilroberta_v1model) -------------------------------
 
 distilroberta.interactions <- emmeans(distilroberta.interaction, ~ race * gender)
-
-pairs(distilroberta.interactions, simple = "gender")
-pairs(distilroberta.interactions, simple = "race")
+pairs(distilroberta.interactions, simple = "gender", reverse = TRUE)
 
 # Race model output (all-MiniLM-L12-v2 model) ----------------------------------
 
@@ -176,6 +172,4 @@ summary(minilm.interaction)$coefficients[8, "df"]
 # Pairwise comparisons (all-MiniLM-L12-v2 model) -------------------------------
 
 minilm.interactions <- emmeans(minilm.interaction, ~ race * gender)
-
-pairs(minilm.interactions, simple = "gender")
-pairs(minilm.interactions, simple = "race")
+pairs(minilm.interactions, simple = "gender", reverse = TRUE)
