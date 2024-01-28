@@ -1,5 +1,5 @@
 # Instructions for Reproducing Analyses
-**Last Updated: 19 Nov 2023**
+**Last Updated: 27 Jan 2023**
 
 Any difficulties reproducing the analysis, please contact the corresponding author, [Messi H.J. Lee](mailto:hojunlee@wustl.edu). 
 
@@ -8,11 +8,11 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
 
 * BERT-2
      * Code used to report results of the likelihood ratio tests and the models' summary outputs (**bert2_models.R**)
-     * Code used to induce sentence embeddings using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert2.R**)
+     * Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert2.R**)
 
 - BERT-3
      - Code used to report results of the likelihood ratio tests and the models' summary outputs (**bert3_models.R**)
-     - Code used to induce sentence embeddings using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert3.R**)
+     - Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert3.R**)
 
 * Data
      * Folder containing text generated to replace non-compliant completions (**Extra**)
@@ -21,11 +21,11 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
      * Folder containing texts generated at initial round of data collection (**Original**)
 
 - Plots
-     - Folder containing the generated plots (**Figures**)
+     - Folder containing the plots included in the main text (**Figures**)
      - Code used to plot the effect of gender (**plot_gender.R**)
      - Code used to plot the interaction effects (**plot_interactions.R**)
      - Code used to plot the effect of race/ethnicity (**plot_race.R**)
-     - Code used to load data frames from all model specifications and save them into a single .RData file (**prepare_all_models.R**)
+     - Code used to load data frames of all model specifications and to save them into a single .RData file (**prepare_all_models.R**)
 
 * Pre-Registration
      * Pre-registration documentation for the project (**Pre-Registration for The Effect of Group Status on the Variability of Group Representations in LLM-generated Text.docx**)
@@ -33,37 +33,38 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
 
 - RoBERTa-2
      - Code used to report results of the likelihood ratio tests and the models' summary outputs (**roberta2_models.R**)
-     - Code used to induce sentence embeddings using RoBERTa-2, measure cosine similarity, and fit mixed-effect models (**roberta2.R**)
+     - Code used to encode LLM-generated text using RoBERTa-2, measure cosine similarity, and fit mixed-effect models (**roberta2.R**)
 
 * RoBERTa-3
      * Code used to report results of the likelihood ratio tests and the models' summary outputs (**roberta3_models.R**)
-     * Code used to induce sentence embeddings using RoBERTa-3, measure cosine similarity, and fit mixed-effect models (**roberta3.R**)
+     * Code used to encode LLM-generated text using RoBERTa-3, measure cosine similarity, and fit mixed-effect models (**roberta3.R**)
 
 - Sentence-BERT
      - Code used to report results of the likelihood ratio tests and the models' summary outputs (**sentence_bert_models.R**)
-     - Code used to induce sentence embeddings using pre-trained Sentence-BERT models, measure cosine similarity, and fit mixed-effect models (**sentence_bert.R**)
-     - Code used to generate sentence embeddings using Sentence-BERT models (**sentence_bert.ipynb**)
+     - Code used to encode LLM-generated text using Sentence-BERT models (**sentence_bert.ipynb**)
+     - Code used to encode LLM-generated text using Sentence-BERT models, measure cosine similarity, and fit mixed-effect models (**sentence_bert.R**)
 
 * Supplement.Preprocessing
      * Code used to test robustness of results to the pre-processing steps used on the generated text (**preprocessing.R**)
 
 - Supplement.STM
-     - Folder containing the generated plots (**Figures**)
+     - Folder containing the plots in the Supplementary Materials (**Figures**)
      - Code used to fit Structural Topic Models (STMs) and to generate STM-related plots (**stm.R**)
-     - Code used to induce sentence embeddings using BERT-2, measure cosine similarity, and fit mixed-effect models on texts about Topic 1 (**topic_1_comparison.R**)
+     - Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models on texts about Topic 1 (**topic_1_comparison.R**)
      - Texts identified as being about Topic 1 as a .csv file (**topic_1.csv**)
+     - Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models on texts about Topic 10 (**topic_10_comparison.R**)
+     - Texts identified as being about Topic 10 as a .csv file (**topic_10.csv**)
 
 * Supplement.Suppression
-     * Folder containing the generated plots (**Figures**)
+     * Folder containing the plots in the Supplementary Materials (**Figures**)
      * Folder containing texts generated using writing prompts that suppress adversity-related completions (**Original**)
-     * Code used to induce sentence embeddings using BERT-2, measure cosine similarity, and fit mixed-effect models on texts that are not about adversity (**suppression_study_1.R**)
-     * Code used to induce sentence embeddings using BERT-2, measure cosine similarity, and fit mixed-effect models on texts that are not about adversity (**suppression_study_2.R**)
+     * Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models on texts that are not about adversity (**suppression_study_1.R**)
+     * Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models on texts that are not about adversity (**suppression_study_2.R**)
 
 - Tables
      - Folder containing texts from the pilot study (**Pilot Data**)
      - Code used to generate Table 1 (**table1.R**)
      - Code used to generate Table S1 (**tableS1.R**)
-     - Code used to generate Table S2 (**tableS2.R**)
 
 
 ## Data Availability Statement
@@ -82,8 +83,9 @@ All code and data required for reproducing analyses are available in the reposit
      - emmeans: https://cran.r-project.org/web/packages/emmeans/index.html
      - psych: https://cran.r-project.org/web/packages/psych/index.html
      - arrow: https://cran.r-project.org/web/packages/arrow/index.html
+     - stm: https://cran.r-project.org/web/packages/stm/index.html
 
-* Python Packages (Python version used: 3.11.4). If Python 3 is not installed, download [a version of Python 3](https://www.python.org/downloads/).
+* Python Packages (Python version used: 3.11.5). If Python 3 is not installed, download [a version of Python 3](https://www.python.org/downloads/).
      * openai: https://pypi.org/project/openai/
      * tqdm: https://pypi.org/project/tqdm/
      * numpy: https://pypi.org/project/numpy/
@@ -99,46 +101,112 @@ All code and data required for reproducing analyses are available in the reposit
 * Execute "generate_text.py” inside the "Original" subfolder of the "Data" folder. 
      - Enter your OpenAI API Key in line 10. 
      - Modify lines 26 and 69 to match the batch of texts being collected. In the first three rounds, set *num_iter* to 128 (the max value) and in the fourth round, set *num_iter* to 116. Modify .csv file name to match batch number. 
-     - This code uses the OpenAI API to generate texts using the pre-defined vignettes (writing prompts) and saves them as .csv files inside the "Original" subfolder of the "Data" folder. 
+     - This code uses the OpenAI API to generate texts using the writing prompts we designed and saves them as .csv files inside the "Original" subfolder of the "Data" folder. 
 
 > **Merge Collected Data into a Single .csv File (Data)**
 * Open "merge_texts.R" using an IDE of your choice (we use RStudio). 
-     - Depending on your data, you may have to define your own set of expressions to use to identify non-compliant completions. You can find the same set of expressions we used in the R file. 
-     - Newly collected data will be different from the ones that we collected. Hence, you will have to tabulate the non-compliant completions that you get in your data. 
-     - Once you get to line 45 of "merge_texts.R", you will have to generate new text to replace the non-compliant ones.
+     - Depending on your data, you may have to define your own set of expressions to use to identify non-compliances. You can find the same set of expressions we used in the R file. 
+     - Line 45 of the code will identify and tabulate the non-compliances that need replacement. 
 
-- Open "generate_extra_1.py" using an IDE of your choice (we use VSCode).
+- Open "generate_extra_1.py" inside the "Extra" subfolder of the "Data" folder using an IDE of your choice (we use VSCode).
      * Enter your OpenAI API Key in line 10. 
-     * Using the non-compliant completions that you tabulated, fill out each of *race_list*, *format_list*, and *gender_list* so that extra text is generated for the tabulated vignettes. 
+     * Fill out *race_list*, *format_list*, and *gender_list* referring to the non-compliances that you tabulated in "merge_texts.R". 
      * Execute "generate_extra_1.py” inside the "Extra" subfolder of the "Data" folder. 
-     * This code uses the OpenAI API to generate texts using the tabulated vignettes and saves them as a .csv file inside the "Extra" subfolder of the "Data" folder. 
+     * This code uses the OpenAI API to replace the non-compliances and saves them as a .csv file inside the "Extra" subfolder of the "Data" folder. 
 
 * Go back to "merge_texts.R".
-     - Again, tabulate the non-compliant completions inside the newly generated text. If you identify additional non-compliant completions, repeat the step above until there are 0 non-compliant completions. 
+     - Again, tabulate the non-compliances inside the newly generated text. If additional non-compliances are identified, repeat the step above until there are 0 non-compliances. 
      - Once you have a complete data set of 52,000 texts, save it as *generated_text_final.csv* inside the "Data" folder. 
 
 
 ### Mixed Effects Models
-> Mixed Effects Model using BERT<sub>-2</sub> (BERT-2 Folder)
+> **Mixed Effects Model using BERT<sub>-2</sub> (BERT-2 Folder)**
 * Open "bert2.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using the second-to-last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+* As fitting mixed effects models takes a long time, you can choose to save the models as an .RData file and use "bert2_models.R" to inspect summary outputs. 
 
-> Mixed Effects Model using BERT<sub>-3</sub> (BERT-3 Folder)
+> **Mixed Effects Model using BERT<sub>-3</sub> (BERT-3 Folder)**
 * Open "bert3.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the third to last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using the third-to-last layer of BERT, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+* As fitting mixed effects models takes a long time, you can choose to save the models as an .RData file and use "bert3_models.R" to inspect summary outputs. 
 
-> Mixed Effects Model using RoBERTa<sub>-2</sub> (RoBERTa-2 Folder)
+> **Mixed Effects Model using RoBERTa<sub>-2</sub> (RoBERTa-2 Folder)**
 * Open "roberta2.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using the second-to-last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+* As fitting mixed effects models takes a long time, you can choose to save the models as an .RData file and use "roberta2_models.R" to inspect summary outputs. 
 
-> Mixed Effects Model using RoBERTa<sub>-3</sub> (Roberta-3 Folder)
+> **Mixed Effects Model using RoBERTa<sub>-3</sub> (Roberta-3 Folder)**
 * Open "roberta3.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the third to last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using the third-to-last layer of RoBERTa, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+* As fitting mixed effects models takes a long time, you can choose to save the models as an .RData file and use "roberta3_models.R" to inspect summary outputs. 
 
-> Mixed Effects Model using Sentence-BERT Models (Sentence-BERT Folder)
+> **Mixed Effects Model using Sentence-BERT Models (Sentence-BERT Folder)**
 * Open "sentence_bert.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using three different Sentence-BERT models, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using three different Sentence-BERT models, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+* As fitting mixed effects models takes a long time, you can choose to save the models as an .RData file and use "sentence_bert_models.R" to inspect summary outputs. 
 
-> Mixed Effects Model using Extra Pre-processing Steps (Supplement.Preprocessing Folder)
+> **Mixed Effects Model using Extra Pre-processing Steps (Supplement.Preprocessing Folder)**
 * Open "preprocessing.R" using an IDE of your choice (we use RStudio). 
-* This code generates sentence embeddings using the second to last layer of BERT having performed additional pre-processing steps on the data, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits two single fixed effect mixed effects models and a mixed effect model including the interaction term. 
+* This code encodes LLM-generated texts using the second to last layer of BERT having performed additional pre-processing steps on the data, calculates the cosine similarity between pairs of sentence embeddings within individual writing prompts, and fits four mixed effects models (Race/Ethnicity model, gender model, Race/Ethnicity, Gender model, and Interaction model). 
+
+
+### Visualization (Plots Folder)
+> **Save All Cosine Similarities as one .RData File**
+* Open "prepare_all_models.R" using an IDE of your choice (we use RStudio). 
+* This code loads dataframes containing standardized cosine similarity values from all model specifications and saves them as "all_models.RData" in the "Plots" folder. 
+
+> **Visualize the Effect of Gender using BERT<sub>-2</sub>**
+* Open "plot_gender.R" using an IDE of your choice (we use RStudio). 
+* Confirm that "all_models.RData" is inside the "Plots" folder. 
+* This code visualizes the effect of gender using BERT<sub>-2</sub> and saves it as "bert2_gender.pdf" inside the "Figures" subfolder of the "Plots" folder. 
+
+> **Visualize the Interaction Effects using All Model Specifications**
+* Open "plot_interactions.R" using an IDE of your choice (we use RStudio). 
+* Confirm that "all_models.RData" is inside the "Plots" folder. 
+* This code visualizes the interaction effects using BERT<sub>-2</sub> and saves it as "bert2_interaction.pdf" inside the "Figures" subfolder of the "Plots" folder. 
+* This code also visualizes the interaction effects across all model specifications and saves it as "all_interactions.pdf" inside the "Figures" subfolder of the "Plots" folder. 
+
+> **Visualize the Effect of Race/Ethnicity using BERT<sub>-2</sub>**
+* Open "plot_race.R" using an IDE of your choice (we use RStudio). 
+* Confirm that "all_models.RData" is inside the "Plots" folder. 
+* This code visualizes the effect of race/ethnicity using BERT<sub>-2</sub> and saves it as "bert2_race.pdf" inside the "Figures" subfolder of the "Plots" folder. 
+
+
+### Supplementary Analysis on Texts that are not about Hardship and Adversity (Supplement.Suppression Folder)
+* Open "suppress_1.py" using an IDE of your choice (we use VSCode). 
+     - Enter your OpenAI API Key in line 7. 
+     - This code uses the OpenAI API to generate texts using the writing prompts that suppress mentioning of hardship and adversity and saves them as "suppression_study_1.csv" inside the "Original" subfolder of the "Supplement.Suppression" folder. 
+
+- Open "suppress_2.py" using an IDE of your choice (we use VSCode). 
+     * Enter your OpenAI API Key in line 7. 
+     * This code uses the OpenAI API to generate texts using the writing prompts about a chef and saves them as "suppression_study_2.csv" inside the "Original" subfolder of the "Supplement.Suppression" folder. 
+
+* Open "suppression_study_1.R" using an IDE of your choice (we use VSCode). 
+     - This code fits a mixed effect model to compare cosine similarity values of racial/ethnic groups within texts that are not about hardship and adversity and visualizes the effect of race/ethnicity using BERT<sub>-2</sub> and saves it as "suppression_study_1_race.pdf" inside the "Figures" subfolder of the "Supplement.Suppression" folder. 
+
+- Open "suppression_study_2.R" using an IDE of your choice (we use VSCode). 
+     * This code conducts independent samples *t*-tests to compare cosine similarity values of racial/ethnic groups within texts that are about a chef preparing a special meal for a loved one and visualizes the effect of race/ethnicity using BERT<sub>-2</sub> and saves it as "suppression_study_2_race.pdf" inside the "Figures" subfolder of the "Supplement.Suppression" folder.  
+
+
+### Supplementary Analysis using Structural Topic Models (Supplement.STM Folder)
+> **Fit a Structural Topic Model using LLM-generated Text**
+* Open "stm.R" using an IDE of your choice (we use RStudio). 
+* This code fits a structural topic model using the LLM-generated text, generates a plot of FREX words and saves it as "frex_words.pdf" inside the "Figures" subfolder of the "Supplement.STM" folder, and performs the comparison of proportion of texts in the top 1 to 5 topics by frequency reported in Table A2. 
+
+> **Compare Cosine Similarity Values of Texts that are about Hardship and Adversity (Topic 1)**
+* Open "topic_1_comparisons.R" using an IDE of your choice (we use RStudio). 
+* This code conducts independent samples *t*-tests to compare cosine similarity values of racial/ethnic groups within texts whose majority topic is Topic 1 and visualizes the effect of race/ethnicity using BERT<sub>-2</sub> and saves it as "topic_1_race.pdf" inside the "Figures" subfolder of the "Supplement.STM" folder. 
+
+> **Compare Cosine Similarity Values of Texts that are about Hardship and Adversity (Topic 10)**
+* Open "topic_10_comparisons.R" using an IDE of your choice (we use RStudio). 
+* This code conducts independent samples *t*-tests to compare cosine similarity values of racial/ethnic groups within texts whose majority topic is Topic 10 and visualizes the effect of race/ethnicity using BERT<sub>-2</sub> and saves it as "topic_10_race.pdf" inside the "Figures" subfolder of the "Supplement.STM" folder. 
+
+
+### Generate Tables
+> **Select Texts to Report in Table 1**
+* Open "table1.R" using an IDE of your choice (we use RStudio). 
+* This code identifies the sentence pairs with the highest and smallest (standardized) cosine similarity values among stories about African American men. 
+
+> **Select Texts to Report in Table S1**
+* Open "tableS1.R" using an IDE of your choice (we use RStudio). 
+* This code randomly samples sentence pairs and their cosine similarity values among stories about White American men. 
