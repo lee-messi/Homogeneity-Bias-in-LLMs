@@ -1,5 +1,5 @@
 # Instructions for Reproducing Analyses
-**Last Updated: 27 Jan 2023**
+**Last Updated: 9 April 2024**
 
 Any difficulties reproducing the analysis, please contact the corresponding author, [Messi H.J. Lee](mailto:hojunlee@wustl.edu). 
 
@@ -7,11 +7,11 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
 ## Guide to the Repository Folders (in Alphabetical Order)
 
 * BERT-2
-     * Code used to report results of the likelihood ratio tests and the models' summary outputs (**bert2_models.R**)
+     * Code used to report results of the likelihood-ratio tests and the models' summary outputs (**bert2_models.R**)
      * Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert2.R**)
 
 - BERT-3
-     - Code used to report results of the likelihood ratio tests and the models' summary outputs (**bert3_models.R**)
+     - Code used to report results of the likelihood-ratio tests and the models' summary outputs (**bert3_models.R**)
      - Code used to encode LLM-generated text using BERT-2, measure cosine similarity, and fit mixed-effect models (**bert3.R**)
 
 * Data
@@ -32,15 +32,15 @@ Any difficulties reproducing the analysis, please contact the corresponding auth
      * Documentation of vignettes used for data collection (**Vignettes for The Effect of Group Status on the Variability of Group Representations in LLM-generated Text.docx**)
 
 - RoBERTa-2
-     - Code used to report results of the likelihood ratio tests and the models' summary outputs (**roberta2_models.R**)
+     - Code used to report results of the likelihood-ratio tests and the models' summary outputs (**roberta2_models.R**)
      - Code used to encode LLM-generated text using RoBERTa-2, measure cosine similarity, and fit mixed-effect models (**roberta2.R**)
 
 * RoBERTa-3
-     * Code used to report results of the likelihood ratio tests and the models' summary outputs (**roberta3_models.R**)
+     * Code used to report results of the likelihood-ratio tests and the models' summary outputs (**roberta3_models.R**)
      * Code used to encode LLM-generated text using RoBERTa-3, measure cosine similarity, and fit mixed-effect models (**roberta3.R**)
 
 - Sentence-BERT
-     - Code used to report results of the likelihood ratio tests and the models' summary outputs (**sentence_bert_models.R**)
+     - Code used to report results of the likelihood-ratio tests and the models' summary outputs (**sentence_bert_models.R**)
      - Code used to encode LLM-generated text using Sentence-BERT models (**sentence_bert.ipynb**)
      - Code used to encode LLM-generated text using Sentence-BERT models, measure cosine similarity, and fit mixed-effect models (**sentence_bert.R**)
 
