@@ -69,4 +69,4 @@ wm_df$cosine <- apply(wm_df, 1, function(row) {
 # Arrange data frame by cosine similarity --------------------------------------
 
 set.seed(1048596)
-sampled_wm_df <- wm_df %>% sample_n(20) %>% arrange(desc(cosine))
+sampled_wm_df <- wm_df %>% sample_n(10) %>% arrange(desc(cosine))
