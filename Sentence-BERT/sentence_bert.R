@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 18 Nov 2023
+## Script date: 11 Apr 2024
 
 # Install and/or load packages -------------------------------------------------
 
@@ -70,6 +70,13 @@ mpnetbase.interaction <- lmer(cosine ~ 1 + race * gender + (1|format),
                               control = lmerControl(optimizer = "nmkbw",
                                                     calc.derivs = FALSE))
 
+# Perform likelihood ratio test for all terms
+mixed(cosine ~ 1 + race * gender + (1|format),
+      data = mpnetbase, 
+      control = lmerControl(optimizer = "nmkbw", 
+                            calc.derivs = FALSE),
+      method = "LRT")
+
 # Fit all mixed effects models (all_distilroberta_v1 model) --------------------
 
 # Model examining the main effect of race/ethnicity
@@ -96,6 +103,13 @@ distilroberta.interaction <- lmer(cosine ~ 1 + race * gender + (1|format),
                                   control = lmerControl(optimizer = "nmkbw",
                                                         calc.derivs = FALSE))
 
+# Perform likelihood ratio test for all terms
+mixed(cosine ~ 1 + race * gender + (1|format),
+      data = distilroberta, 
+      control = lmerControl(optimizer = "nmkbw", 
+                            calc.derivs = FALSE),
+      method = "LRT")
+
 # Fit all mixed effects models (all-MiniLM-L12-v2 model) -----------------------
 
 # Model examining the main effect of race/ethnicity
@@ -121,6 +135,13 @@ minilm.interaction <- lmer(cosine ~ 1 + race * gender + (1|format),
                            data = minilm,
                            control = lmerControl(optimizer = "nmkbw",
                                                  calc.derivs = FALSE))
+
+# Perform likelihood ratio test for all terms
+mixed(cosine ~ 1 + race * gender + (1|format),
+      data = minilm, 
+      control = lmerControl(optimizer = "nmkbw", 
+                            calc.derivs = FALSE),
+      method = "LRT")
 
 # Save as .RData ---------------------------------------------------------------
 
