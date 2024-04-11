@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 18 Jan 2024
+## Script date: 10 Apr 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -45,8 +45,8 @@ summary(gender.model)$coefficients[2, "df"]
 # Race and gender model output -------------------------------------------------
 
 # Summary output and log likelihood of the race and gender model
-summary(race.gender)
-logLik(race.gender)
+summary(race.gender.model)
+logLik(race.gender.model)
 
 # Report degrees of freedom for t-statistics
 summary(gender.model)$coefficients[2, "df"]
