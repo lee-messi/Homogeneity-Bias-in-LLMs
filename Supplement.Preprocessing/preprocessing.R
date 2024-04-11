@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 18 Jan 2024
+## Script date: 11 Apr 2024
 
 # Install and/or Load Packages -------------------------------------------------
 
@@ -246,11 +246,11 @@ summary(gender.model)$coefficients[2, "df"]
 # Race and gender model output -------------------------------------------------
 
 # Summary output and log likelihood of the race and gender model
-summary(race.gender)
-logLik(race.gender)
+summary(race.gender.model)
+logLik(race.gender.model)
 
 # Report degrees of freedom for t-statistics
-summary(gender.model)$coefficients[2, "df"]
+summary(race.gender.model)$coefficients[2, "df"]
 
 # Interaction model output -----------------------------------------------------
 
@@ -273,6 +273,15 @@ summary(interaction.model)$coefficients[8, "df"]
 
 cosine.interactions <- emmeans(interaction.model, ~ race * gender)
 pairs(cosine.interactions, simple = "gender", reverse = TRUE)
+
+# Likelihood ratio tests -------------------------------------------------------
+
+# Perform likelihood ratio test for all terms
+mixed(cosine ~ 1 + race * gender + (1|format),
+      data = cosine_std, 
+      control = lmerControl(optimizer = "nmkbw", 
+                            calc.derivs = FALSE),
+      method = "LRT")
 
 # Save as .RData ---------------------------------------------------------------
 
