@@ -3,7 +3,7 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 23 Nov 2023
+## Script date: 25 Apr 2024
 
 # Install and/or load packages -------------------------------------------------
 
@@ -11,6 +11,7 @@ if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); re
 if(!require("stm")){install.packages("stm", dependencies = TRUE); require("stm")}
 if(!require("reshape2")){install.packages("reshape2", dependencies = TRUE); require("reshape2")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
+if(!require("Cairo")){install.packages("Cairo", dependencies = TRUE); require("Cairo")} # Install XQuartz for this
 
 # Load generated text ----------------------------------------------------------
 
@@ -58,10 +59,11 @@ fit <- stm(documents = out$documents,
 
 # save.image('stm.RData')
 load('stm.RData')
-labelTopics(fit)
 
-pdf(file = "Figures/frex_words.pdf", width = 10, height = 6) 
-plot.STM(fit, n = 5)
+# Visualize FREX words ---------------------------------------------------------
+
+cairo_pdf("Figures/high_prob_words.pdf", width = 10, height = 6)
+plot(fit, n = 5)
 dev.off()
 
 # Create a dataframe of thetas -------------------------------------------------
@@ -161,7 +163,7 @@ ggplot(data.with.topic, aes(x = topic, fill = race)) +
         legend.text = element_text(size = 15)) + 
   scale_fill_aaas()
 
-ggsave("Figures/stm_topic_distributions.pdf", width = 10, height = 6, dpi = "retina")
+# ggsave("Figures/stm_topic_distributions.pdf", width = 10, height = 6, dpi = "retina")
 
 # Perform F tests to compare variances -----------------------------------------
 

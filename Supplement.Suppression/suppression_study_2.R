@@ -16,6 +16,7 @@ if(!require("afex")){install.packages("afex", dependencies = TRUE); require("afe
 if(!require("emmeans")){install.packages("emmeans", dependencies = TRUE); require("emmeans")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 if(!require("ggplot2")){install.packages("ggplot2", dependencies = TRUE); require("ggplot2")}
+if(!require("Cairo")){install.packages("Cairo", dependencies = TRUE); require("Cairo")} # Install XQuartz for this
 
 # Initilize the text package ---------------------------------------------------
 
@@ -187,4 +188,5 @@ ggplot(cosine_std, aes(x = race, y = cosine, color = race)) +
   coord_cartesian(ylim = c(-0.60, 0.60)) +
   scale_color_aaas()
 
-ggsave("Figures/suppression_study_2_race.pdf", width = 6, height = 2.5, dpi = "retina")
+ggsave("Figures/suppression_study_2_race.pdf", width = 6, height = 2.5, 
+       dpi = "retina", device = cairo_pdf)
