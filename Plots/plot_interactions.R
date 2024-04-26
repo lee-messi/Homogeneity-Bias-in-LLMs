@@ -3,13 +3,14 @@
 # Large Language Models Portray Socially Subordinate Groups as More Homogeneous, 
 # Consistent with a Bias Observed in Humans
 
-## Script date: 21 Mar 2024
+## Script date: 25 Apr 2024
 
 # Install and/or load packages -------------------------------------------------
 
 if(!require("tidyverse")){install.packages("tidyverse", dependencies = TRUE); require("tidyverse")}
 if(!require("ggsci")){install.packages("ggsci", dependencies = TRUE); require("ggsci")}
 if(!require("ggpubr")){install.packages("ggpubr", dependencies = TRUE); require("ggpubr")}
+if(!require("Cairo")){install.packages("Cairo", dependencies = TRUE); require("Cairo")} # Install XQuartz for this
 
 # Load all data frames ---------------------------------------------------------
 
@@ -66,7 +67,8 @@ ggplot(bert2, aes(x = race, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-ggsave("Figures/bert2_interaction.pdf", width = 6, height = 2.5, dpi = "retina")
+ggsave("Figures/bert2_interaction.pdf", width = 6, height = 2.5, 
+       dpi = "retina", device = cairo_pdf)
 
 # Interaction plot for all model specifications --------------------------------
 
@@ -91,5 +93,6 @@ ggplot(all_models, aes(x = model, y = cosine, color = gender)) +
   scale_color_aaas()
 
 # Save plot
-ggsave("Figures/all_interactions.pdf", width = 10, height = 6, dpi = "retina")
+ggsave("Figures/all_interactions.pdf", width = 10, height = 6, 
+       dpi = "retina", device = cairo_pdf)
 
